@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from src.production.feature_builder import FeatureBuilder
@@ -20,12 +23,20 @@ app.add_middleware(
         "http://localhost:8001",
         "http://127.0.0.1:5500",
         "http://localhost:5500",
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+        "http://traffic-volume-production.up.railway.app",
+        "https://traffic-volume-production.up.railway.app",
         "null",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+static_path = Path(__file__).parent.parent / "src"
+app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 predictor = TrafficPredictor()
 weather_client = WeatherClient()
@@ -40,8 +51,16 @@ class ForecastRequest(BaseModel):
 
 
 @app.get("/")
-def home() -> Dict[str, str]:
-    return {"message": "Traffic Volume Forecast API is running"}
+def home() -> FileResponse:
+    """Serve the frontend dashboard."""
+    index_path = Path(__file__).parent.parent / "src" / "index.html"
+    return FileResponse(index_path, media_type="text/html")
+
+
+@app.get("/api/health")
+def health_check() -> Dict[str, str]:
+    """API health check endpoint."""
+    return {"status": "ok", "message": "Traffic Volume Forecast API is running"}
 
 
 @app.post("/predict")
