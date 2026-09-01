@@ -21,6 +21,27 @@ const weekendCurve = [
   4600, 4550, 4500, 4450, 4400, 4200, 3800, 3200, 2700, 2300, 1800, 1300
 ];
 
+let displayedVol = 0;
+let numberAnimFrame = null;
+function animateNumber(el, target) {
+  const start = displayedVol;
+  const startTime = performance.now();
+  const duration = 380;
+  if (numberAnimFrame) cancelAnimationFrame(numberAnimFrame);
+  function tick(now) {
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const val = Math.round(start + (target - start) * eased);
+    el.textContent = val.toLocaleString();
+    if (t < 1) {
+      numberAnimFrame = requestAnimationFrame(tick);
+    } else {
+      displayedVol = target;
+    }
+  }
+  numberAnimFrame = requestAnimationFrame(tick);
+}
+
 function formatH(h) {
   const p = h >= 12 ? 'PM' : 'AM';
   const d = h % 12 === 0 ? 12 : h % 12;
@@ -39,59 +60,47 @@ function updateSim() {
 
   let base = (day === 'weekday') ? weekdayCurve[h] : weekendCurve[h];
   let modifier = 1.0;
-  let weatherText = '0% (Clear)';
+  let weatherText = '0% (clear)';
 
   switch (weather) {
-    case 'clouds':
-      modifier = 0.98;
-      weatherText = '-2% (Clouds)';
-      break;
-    case 'rain_light':
-      modifier = 0.92;
-      weatherText = '-8% (Light Rain)';
-      break;
-    case 'rain_heavy':
-      modifier = 0.82;
-      weatherText = '-18% (Heavy Rain)';
-      break;
-    case 'snow_light':
-      modifier = 0.85;
-      weatherText = '-15% (Snow)';
-      break;
-    case 'snow_heavy':
-      modifier = 0.68;
-      weatherText = '-32% (Heavy Snow)';
-      break;
-    case 'fog':
-      modifier = 0.90;
-      weatherText = '-10% (Fog)';
-      break;
+    case 'clouds': modifier = 0.98; weatherText = '-2% (clouds)'; break;
+    case 'rain_light': modifier = 0.92; weatherText = '-8% (light rain)'; break;
+    case 'rain_heavy': modifier = 0.82; weatherText = '-18% (heavy rain)'; break;
+    case 'snow_light': modifier = 0.85; weatherText = '-15% (snow)'; break;
+    case 'snow_heavy': modifier = 0.68; weatherText = '-32% (heavy snow)'; break;
+    case 'fog': modifier = 0.90; weatherText = '-10% (fog)'; break;
   }
 
   if (temp < -15) modifier *= 0.92;
   if (isHoliday) base *= 0.65;
 
   const vol = Math.round(base * modifier);
-  numVol.textContent = vol.toLocaleString();
+  animateNumber(numVol, vol);
+  numVol.classList.remove('pulse');
+  void numVol.offsetWidth; // restart animation
+  numVol.classList.add('pulse');
 
   bTime.textContent = day === 'weekday'
-    ? (h >= 7 && h <= 9 ? 'Morning Peak Commute' : (h >= 16 && h <= 18 ? 'Evening Peak Commute' : (h <= 5 ? 'Night Flow' : 'Midday Traffic')))
-    : 'Weekend Curve';
+    ? (h >= 7 && h <= 9 ? 'Morning peak commute' : (h >= 16 && h <= 18 ? 'Evening peak commute' : (h <= 5 ? 'Night flow' : 'Midday traffic')))
+    : 'Weekend curve';
 
   bWeather.textContent = weatherText;
   const capPct = Math.min(100, Math.round((vol / 7280) * 100));
   bCap.textContent = `${capPct}% of highway capacity`;
 
+  let statusClass = 'st-light';
   if (vol > 5500) {
-    badgeStatus.textContent = 'Severe Congestion / Peak Rush';
-    badgeStatus.className = 'status-badge st-rush';
+    badgeStatus.textContent = 'Severe congestion / peak rush';
+    statusClass = 'st-rush';
   } else if (vol > 3600) {
-    badgeStatus.textContent = 'Moderate Commute Flow';
-    badgeStatus.className = 'status-badge st-mod';
+    badgeStatus.textContent = 'Moderate commute flow';
+    statusClass = 'st-mod';
   } else {
-    badgeStatus.textContent = 'Light / Free-Flow Traffic';
-    badgeStatus.className = 'status-badge st-light';
+    badgeStatus.textContent = 'Light / free-flow traffic';
+    statusClass = 'st-light';
   }
+  badgeStatus.className = `status-badge ${statusClass}`;
+  numVol.style.color = statusClass === 'st-rush' ? '#F2837A' : statusClass === 'st-mod' ? '#F2A900' : '#FFFFFF';
 }
 
 function setPreset(h, day, weather, temp, isHol) {
@@ -109,35 +118,68 @@ function setPreset(h, day, weather, temp, isHol) {
 });
 updateSim();
 
+/* ─── Live Minneapolis weather → advisory board ──────────────────── */
 (function () {
   const API_KEY = '6f758c1057f74c43b5f163533252311';
   const url = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=Minneapolis&aqi=no`;
+
+  function applyMascotState({ tempC, condText, precipMm, cloudPct }) {
+    document.getElementById('mascot-temp').textContent = `${Math.round(tempC)}°C`;
+    document.getElementById('mascot-cond').textContent = condText.toUpperCase();
+    document.getElementById('mascot-rain').textContent = `${precipMm} mm`;
+    document.getElementById('mascot-cloud').textContent = `${cloudPct}%`;
+
+    const impact = document.getElementById('mascot-impact');
+    const car = document.getElementById('mascot-car');
+    let speed = '3.2s'; // free flow, brisk drive
+
+    if (precipMm > 2 || condText.toLowerCase().includes('snow')) {
+      impact.textContent = 'Heavy drag (-20%)';
+      impact.style.color = '#F2837A';
+      speed = '7s';
+    } else if (cloudPct > 75) {
+      impact.textContent = 'Slight slowdown';
+      impact.style.color = '#F2A900';
+      speed = '4.5s';
+    } else {
+      impact.textContent = 'Clear, smooth flow';
+      impact.style.color = '#5FCB94';
+      speed = '3.2s';
+    }
+
+    if (car) {
+      car.style.animation = `driveAcross ${speed} linear infinite`;
+    }
+  }
+
+  // inject the drive keyframes once
+  const styleTag = document.createElement('style');
+  styleTag.textContent = `
+    #mascot-car { animation: driveAcross 3.2s linear infinite; transform-box: fill-box; }
+    @keyframes driveAcross {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(238px); }
+    }
+    #mascot-cloud { animation: bobCloud 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes bobCloud {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+  `;
+  document.head.appendChild(styleTag);
 
   fetch(url)
     .then((r) => r.json())
     .then((data) => {
       const cur = data.current;
-      document.getElementById('mascot-temp').textContent = `${Math.round(cur.temp_c)} °C (${Math.round(cur.temp_c + 273.15)} K)`;
-      document.getElementById('mascot-cond').textContent = cur.condition.text;
-      document.getElementById('mascot-rain').textContent = `${cur.precip_mm} mm`;
-      document.getElementById('mascot-cloud').textContent = `${cur.cloud} %`;
-
-      const impact = document.getElementById('mascot-impact');
-      if (cur.precip_mm > 2 || cur.condition.text.toLowerCase().includes('snow')) {
-        impact.textContent = 'Adverse Weather Drag (-20%)';
-        impact.style.color = '#EF4444';
-      } else if (cur.cloud > 75) {
-        impact.textContent = 'Overcast / Slight Slowdown';
-        impact.style.color = '#F59E0B';
-      } else {
-        impact.textContent = 'Clear & Smooth Flow';
-        impact.style.color = '#10B981';
-      }
+      applyMascotState({
+        tempC: cur.temp_c,
+        condText: cur.condition.text,
+        precipMm: cur.precip_mm,
+        cloudPct: cur.cloud
+      });
     })
     .catch(() => {
-      document.getElementById('mascot-temp').textContent = '22 °C (295 K)';
-      document.getElementById('mascot-cond').textContent = 'Clear';
-      document.getElementById('mascot-rain').textContent = '0 mm';
-      document.getElementById('mascot-cloud').textContent = '10 %';
+      applyMascotState({ tempC: 22, condText: 'Clear', precipMm: 0, cloudPct: 10 });
     });
 })();

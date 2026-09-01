@@ -4,267 +4,209 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>I-94 Traffic AI — Smart Traffic & Weather Forecast</title>
-  <meta name="description" content="A friendly, intelligent traffic and weather forecasting platform for Interstate 94 between Minneapolis and St. Paul." />
+  <meta name="description" content="A predictive traffic and weather platform for Interstate 94 between Minneapolis and St. Paul, styled after real highway signage." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-<!-- ─── Background Decorative Clouds ─────────────────────────────── -->
-<div class="bg-cloud bg-cloud-1">
-  <svg viewBox="0 0 100 55" fill="#E2E8F0">
-    <path d="M25 50h55a15 15 0 0 0 0-30 20 20 0 0 0-38-6 15 15 0 0 0-17 16 12 12 0 0 0 0 20z"/>
-  </svg>
-</div>
-<div class="bg-cloud bg-cloud-2">
-  <svg viewBox="0 0 100 55" fill="#E2E8F0">
-    <path d="M25 50h55a15 15 0 0 0 0-30 20 20 0 0 0-38-6 15 15 0 0 0-17 16 12 12 0 0 0 0 20z"/>
-  </svg>
-</div>
 
 <!-- ─── Navigation Header ────────────────────────────────────────── -->
 <header>
   <div class="nav-wrap">
     <a href="#" class="logo">
-      <div class="logo-badge">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2">
-          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
-          <circle cx="7" cy="17" r="2"></circle>
-          <path d="M9 17h6"></path>
-          <circle cx="17" cy="17" r="2"></circle>
-        </svg>
-      </div>
-      Traffic<span>AI</span>
+      <svg class="shield" width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M20 2 L37 8 V20 C37 29 30 35 20 38 C10 35 3 29 3 20 V8 Z" fill="#0B5D3B" stroke="#FFFFFF" stroke-width="2.4"/>
+        <path d="M11 22 H29 M11 22 L14 17 H26 L29 22" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="14.5" cy="26" r="1.6" fill="#FFFFFF"/>
+        <circle cx="25.5" cy="26" r="1.6" fill="#FFFFFF"/>
+      </svg>
+      Traffic<b>AI</b>
     </a>
-    
+
     <ul class="nav-links">
       <li><a href="#simulator">Simulator</a></li>
-      <li><a href="#factors">Key Insights</a></li>
-      <li><a href="#dataset">Data Table</a></li>
+      <li><a href="#factors">Insights</a></li>
+      <li><a href="#dataset">Dataset</a></li>
       <li><a href="#models">Models</a></li>
     </ul>
 
-    <div>
-      <a href="#simulator" class="btn btn-primary">Try Simulator</a>
-    </div>
+    <a href="#simulator" class="btn btn-primary">Try the simulator</a>
   </div>
 </header>
 
-<!-- ─── Hero Section with Smiling Mascot ─────────────────────────── -->
+<!-- ─── Hero: overhead interstate guide-sign motif ───────────────── -->
 <section class="hero">
   <div class="hero-grid">
-    
-    <!-- Left Hero Copy -->
+
     <div>
-      <div class="hero-pill">
-        I-94 Minneapolis · Machine Learning
+      <div class="route-marker">
+        <span class="route-shield-lg">I-94 W</span>
+        <span class="dest">MINNEAPOLIS → ST. PAUL</span>
       </div>
-      <h1 class="hero-title">
-        Smart Highway Traffic & <span class="text-primary">Weather Forecasting</span>
-      </h1>
+      <h1 class="hero-title">Know what<br><em>traffic</em> looks like<br>before you drive.</h1>
       <p class="hero-subtitle">
-        An easy-to-use predictive platform analyzing 48,204 hours of traffic flow. See how rush hours, snowstorms, and holidays affect interstate capacity.
+        A machine-learning model trained on 48,204 hours of interstate flow, weather, and calendar data — turned into a simulator you can actually play with.
       </p>
 
       <div class="hero-cta-group">
         <a href="#simulator" class="btn btn-primary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
-          Interactive Simulator
+          Run the simulator
         </a>
-        <a href="#dataset" class="btn btn-white">View Dataset</a>
+        <a href="#dataset" class="btn btn-ghost">View the dataset</a>
       </div>
 
       <div class="hero-stats-row">
         <div class="hero-stat">
           <strong>48,204</strong>
-          <span>Hourly Records</span>
+          <span>Hourly records</span>
         </div>
         <div class="hero-stat">
-          <strong>2012–2018</strong>
-          <span>Data Horizon</span>
+          <strong>2012–18</strong>
+          <span>Data horizon</span>
         </div>
         <div class="hero-stat">
-          <strong>100%</strong>
-          <span>Clean Records</span>
+          <strong>7,280</strong>
+          <span>Vehicles/hr at capacity</span>
         </div>
       </div>
     </div>
 
-    <!-- Right Mascot & Live Weather Card -->
-    <div class="mascot-card">
-      <div class="mascot-header">
-        <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
+    <!-- Variable Message Sign: live conditions -->
+    <div class="vms-unit">
+      <div class="vms-board">
+        <div class="vms-top">
+          <h3>Advisory Board · Minneapolis</h3>
+          <span class="live-chip"><span class="live-dot"></span>LIVE</span>
+        </div>
+
+        <div class="vms-screen">
+          <svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg">
+            <!-- sun -->
+            <circle cx="222" cy="34" r="16" fill="#F2A900" opacity="0.85"/>
+            <!-- cloud -->
+            <g id="mascot-cloud">
+              <path d="M60 72C60 61.5 68.5 53 79 53C81.2 53 83.3 53.4 85.3 54.1C89.6 42.5 100.8 34 114 34C129.7 34 142.7 45.7 144.9 60.8C148.4 58.7 152.5 57.5 156.9 57.5C170 57.5 180.6 68.1 180.6 81.2C180.6 94.3 170 105 156.9 105H73.5C60.6 105 50 94.4 50 81.5C50 76.1 51.9 71.1 55 67.1C57.6 69.6 60 72 60 72Z" fill="#F4F2EC" opacity="0.95"/>
+              <path d="M98 79C98 75.4 103.5 75.4 103.5 79" stroke="#1B1D1F" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M126 79C126 75.4 131.5 75.4 131.5 79" stroke="#1B1D1F" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M108 87C108 92 121 92 121 87" stroke="#1B1D1F" stroke-width="2.2" stroke-linecap="round"/>
+            </g>
+            <!-- road -->
+            <path d="M6 118H274" stroke="#3A3E40" stroke-width="2" stroke-linecap="round" stroke-dasharray="9 9"/>
+            <!-- car (animated horizontally via CSS) -->
+            <g id="mascot-car">
+              <rect x="0" y="104" width="34" height="13" rx="3" fill="#F2A900"/>
+              <path d="M4 104L9 98H23L28 104H4Z" fill="#B97900"/>
+              <circle cx="8" cy="117" r="3.2" fill="#101213"/>
+              <circle cx="26" cy="117" r="3.2" fill="#101213"/>
+            </g>
           </svg>
-          Live Minneapolis Weather
-        </h3>
-        <span class="live-chip">
-          <span class="live-dot"></span>
-          Live API
-        </span>
-      </div>
-
-      <!-- Smiling Cloud + Highway Illustration -->
-      <div class="character-stage">
-        <svg class="character-svg" viewBox="0 0 280 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Warm Glowing Sun Behind Cloud -->
-          <circle cx="210" cy="40" r="22" fill="#FDE047"/>
-          <circle cx="210" cy="40" r="16" fill="#F59E0B"/>
-          
-          <!-- Cute Smiling Cloud Body -->
-          <g id="smiling-cloud">
-            <!-- Cloud Puffs -->
-            <path d="M70 78C70 66.95 78.95 58 90 58C92.4 58 94.7 58.4 96.8 59.2C101.4 46.8 113.3 38 127 38C143.5 38 157.2 50.4 159.6 66.5C163.4 64.3 167.8 63 172.5 63C186.6 63 198 74.4 198 88.5C198 102.6 186.6 114 172.5 114H85C71.2 114 60 102.8 60 89C60 83.2 62 77.8 65.4 73.6C68.2 76.3 70 78 70 78Z" fill="#FFFFFF"/>
-            <path d="M70 78C70 66.95 78.95 58 90 58C92.4 58 94.7 58.4 96.8 59.2C101.4 46.8 113.3 38 127 38C143.5 38 157.2 50.4 159.6 66.5C163.4 64.3 167.8 63 172.5 63C186.6 63 198 74.4 198 88.5C198 102.6 186.6 114 172.5 114H85C71.2 114 60 102.8 60 89C60 83.2 62 77.8 65.4 73.6" stroke="#93C5FD" stroke-width="2.5" stroke-linecap="round"/>
-            
-            <!-- Eyes (Cute Happy Curved Eyes) -->
-            <path d="M112 75C112 71 118 71 118 75" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
-            <path d="M142 75C142 71 148 71 148 75" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
-            
-            <!-- Rosy Cheeks -->
-            <circle cx="106" cy="83" r="4.5" fill="#FCA5A5" fill-opacity="0.6"/>
-            <circle cx="154" cy="83" r="4.5" fill="#FCA5A5" fill-opacity="0.6"/>
-            
-            <!-- Smiling Mouth -->
-            <path d="M124 82C124 88 136 88 136 82" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
-          </g>
-
-          <!-- Little Road + Friendly Green Car Below -->
-          <path d="M10 120H270" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 8"/>
-          <rect x="180" y="108" width="32" height="12" rx="3" fill="#10B981"/>
-          <circle cx="188" cy="120" r="3" fill="#1E293B"/>
-          <circle cx="204" cy="120" r="3" fill="#1E293B"/>
-          <path d="M185 108L190 103H202L206 108H185Z" fill="#059669"/>
-        </svg>
-      </div>
-
-      <!-- Live Minneapolis Data Grid -->
-      <div class="live-data-grid">
-        <div class="live-data-box">
-          <div class="live-label">Temp</div>
-          <div class="live-val" id="mascot-temp">Loading…</div>
+          <div class="dot-msg" id="mascot-cond">FETCHING CONDITIONS…</div>
         </div>
-        <div class="live-data-box">
-          <div class="live-label">Weather</div>
-          <div class="live-val" id="mascot-cond" style="font-size:14px;">Fetching…</div>
-        </div>
-        <div class="live-data-box">
-          <div class="live-label">Precipitation</div>
-          <div class="live-val" id="mascot-rain">— mm</div>
-        </div>
-        <div class="live-data-box">
-          <div class="live-label">Cloud Cover</div>
-          <div class="live-val" id="mascot-cloud">— %</div>
-        </div>
-      </div>
 
-      <div class="impact-pill-banner">
-        <span>Current Highway Impact:</span>
-        <strong id="mascot-impact">Normal Flow</strong>
+        <div class="vms-data-grid">
+          <div class="vms-data-box">
+            <div class="vms-label">Temp</div>
+            <div class="vms-val" id="mascot-temp">—</div>
+          </div>
+          <div class="vms-data-box">
+            <div class="vms-label">Precip</div>
+            <div class="vms-val" id="mascot-rain">— mm</div>
+          </div>
+          <div class="vms-data-box">
+            <div class="vms-label">Cloud cover</div>
+            <div class="vms-val" id="mascot-cloud">— %</div>
+          </div>
+          <div class="vms-data-box">
+            <div class="vms-label">Highway impact</div>
+            <div class="vms-val" id="mascot-impact" style="font-size:13px;">—</div>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ─── Interactive Traffic Simulator ─────────────────────────────────── -->
+<!-- ─── Interactive Traffic Simulator ─────────────────────────────── -->
 <section id="simulator">
   <div class="container">
-    <div class="section-head">
-      <span class="badge-sub">Interactive Forecast</span>
-      <h2 class="section-title">Traffic Volume Simulator</h2>
-      <p class="section-desc">
-        Pick a time, weather, and day of week to immediately calculate estimated hourly traffic on I-94.
-      </p>
+    <div class="section-head center" style="margin-left:auto;margin-right:auto;">
+      <span class="mile-marker">Interactive forecast</span>
+      <h2 class="section-title">Set the conditions, read the road</h2>
+      <p class="section-desc">Pick an hour, a day, and the weather — the board updates the estimate live, the way a roadside sign would.</p>
     </div>
 
     <div class="sim-card">
-      
-      <!-- Inputs & Presets -->
+
       <div>
         <div class="presets-bar">
-          <span class="preset-label">Quick Presets:</span>
-          <button class="preset-btn" onclick="setPreset(8, 'weekday', 'clear', 20, false)">Morning Rush</button>
-          <button class="preset-btn" onclick="setPreset(17, 'weekday', 'rain_heavy', 12, false)">Rainy Evening</button>
-          <button class="preset-btn" onclick="setPreset(14, 'saturday', 'clear', 24, false)">Weekend Sun</button>
-          <button class="preset-btn" onclick="setPreset(2, 'weekday', 'clear', 5, false)">Midnight Drive</button>
+          <span class="preset-label">Quick presets</span>
+          <button class="preset-btn" onclick="setPreset(8, 'weekday', 'clear', 20, false)">Morning rush</button>
+          <button class="preset-btn" onclick="setPreset(17, 'weekday', 'rain_heavy', 12, false)">Rainy evening</button>
+          <button class="preset-btn" onclick="setPreset(14, 'saturday', 'clear', 24, false)">Weekend sun</button>
+          <button class="preset-btn" onclick="setPreset(2, 'weekday', 'clear', 5, false)">Midnight drive</button>
         </div>
 
         <div class="form-group">
           <div class="form-label-row">
-            <span class="form-label">Time of Day (Hour)</span>
+            <span class="form-label">Time of day</span>
             <span class="val-chip" id="sim-hour-badge">08:00 AM</span>
           </div>
-          <input type="range" id="slider-hour" class="sim-slider" min="0" max="23" value="8" />
+          <input type="range" id="slider-hour" class="sim-slider" min="0" max="23" value="8" aria-label="Hour of day" />
         </div>
 
         <div class="form-group">
-          <div class="form-label-row">
-            <span class="form-label">Day of Week</span>
-          </div>
+          <div class="form-label-row"><span class="form-label">Day of week</span></div>
           <select id="select-day" class="sim-select">
-            <option value="weekday" selected>Monday – Friday (Regular Weekday)</option>
+            <option value="weekday" selected>Monday – Friday</option>
             <option value="saturday">Saturday</option>
             <option value="sunday">Sunday</option>
           </select>
         </div>
 
         <div class="form-group">
-          <div class="form-label-row">
-            <span class="form-label">Weather Condition</span>
-          </div>
+          <div class="form-label-row"><span class="form-label">Weather condition</span></div>
           <select id="select-weather" class="sim-select">
-            <option value="clear" selected>Clear Skies</option>
-            <option value="clouds">Cloudy / Overcast</option>
-            <option value="rain_light">Light Rain</option>
-            <option value="rain_heavy">Heavy Rain / Storm</option>
-            <option value="snow_light">Light Snowfall</option>
-            <option value="snow_heavy">Heavy Snow / Blizzard</option>
-            <option value="fog">Mist / Fog</option>
+            <option value="clear" selected>Clear skies</option>
+            <option value="clouds">Cloudy / overcast</option>
+            <option value="rain_light">Light rain</option>
+            <option value="rain_heavy">Heavy rain / storm</option>
+            <option value="snow_light">Light snowfall</option>
+            <option value="snow_heavy">Heavy snow / blizzard</option>
+            <option value="fog">Mist / fog</option>
           </select>
         </div>
 
         <div class="form-group">
           <div class="form-label-row">
-            <span class="form-label">Ambient Temperature</span>
+            <span class="form-label">Ambient temperature</span>
             <span class="val-chip" id="sim-temp-badge">20 °C (293 K)</span>
           </div>
-          <input type="range" id="slider-temp" class="sim-slider" min="-25" max="35" value="20" />
+          <input type="range" id="slider-temp" class="sim-slider" min="-25" max="35" value="20" aria-label="Temperature in Celsius" />
         </div>
 
         <label class="sim-check-pill">
           <input type="checkbox" id="check-holiday" />
-          <span>Public Holiday / Minnesota State Fair</span>
+          <span>Public holiday / Minnesota State Fair</span>
         </label>
       </div>
 
-      <!-- Result Panel -->
       <div class="sim-result-box">
-        <div class="res-label">Estimated Westbound Volume</div>
+        <div class="res-label">Estimated westbound volume</div>
         <div class="res-number" id="sim-vol-number">5,840</div>
-        <div class="res-unit">Vehicles / Hour</div>
-        
-        <div class="status-badge st-rush" id="sim-status-badge">Morning Rush Peak</div>
+        <div class="res-unit">Vehicles / hour</div>
+
+        <div class="status-badge st-rush" id="sim-status-badge">Morning rush peak</div>
 
         <div class="breakdown-list">
-          <div class="breakdown-item">
-            <span>Diurnal Rhythm:</span>
-            <strong id="sim-break-time">Morning Peak Commute</strong>
-          </div>
-          <div class="breakdown-item">
-            <span>Weather Drag:</span>
-            <strong id="sim-break-weather">0% (Clear)</strong>
-          </div>
-          <div class="breakdown-item">
-            <span>Road Utilization:</span>
-            <strong id="sim-break-cap">80% of max capacity</strong>
-          </div>
+          <div class="breakdown-item"><span>Diurnal rhythm</span><strong id="sim-break-time">Morning peak commute</strong></div>
+          <div class="breakdown-item"><span>Weather drag</span><strong id="sim-break-weather">0% (clear)</strong></div>
+          <div class="breakdown-item"><span>Road utilization</span><strong id="sim-break-cap">80% of capacity</strong></div>
         </div>
       </div>
 
@@ -276,139 +218,75 @@
 <section id="factors">
   <div class="container">
     <div class="section-head">
-      <span class="badge-sub">Key Insights</span>
-      <h2 class="section-title">The Three Big Drivers of Traffic</h2>
-      <p class="section-desc">
-        Understanding what moves interstate volume from 400 to 7,000+ vehicles per hour.
-      </p>
+      <span class="mile-marker">Key insights</span>
+      <h2 class="section-title">Three drivers move most of the volume</h2>
+      <p class="section-desc">What separates 400 vehicles an hour from 7,000+.</p>
     </div>
 
     <div class="cards-row">
       <div class="card-item">
         <div class="card-icon green">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
         </div>
-        <h3>1. Time of Day (Rush Hours)</h3>
-        <p>
-          Explains 80%+ of volume changes. Sharp twin peaks on weekdays: 7–9 AM morning commute and 4–6 PM evening return.
-        </p>
+        <h3>Time of day</h3>
+        <p>Explains most of the variance on its own. Weekdays show two sharp peaks: 7–9 AM inbound, 4–6 PM outbound.</p>
       </div>
 
       <div class="card-item">
-        <div class="card-icon blue">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <div class="card-icon amber2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"></path>
             <line x1="8" y1="16" x2="8.01" y2="16"></line>
             <line x1="12" y1="18" x2="12.01" y2="18"></line>
             <line x1="16" y1="16" x2="16.01" y2="16"></line>
           </svg>
         </div>
-        <h3>2. Weather & Winter Snow</h3>
-        <p>
-          Minnesota snowstorms and freezing rain slow throughput by up to 35%, while clear warm days maintain max flow.
-        </p>
+        <h3>Weather & winter snow</h3>
+        <p>Heavy snow and freezing rain cut throughput by up to a third. Clear, mild days hold peak flow the longest.</p>
       </div>
 
       <div class="card-item">
-        <div class="card-icon amber">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <div class="card-icon red2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
         </div>
-        <h3>3. Holidays & Weekends</h3>
-        <p>
-          Major holidays suppress regular morning peaks, turning busy workdays into gentle afternoon curves.
-        </p>
+        <h3>Holidays & weekends</h3>
+        <p>Holidays flatten the morning peak entirely, turning a workday commute pattern into a gentle afternoon curve.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ─── Dataset Schema Section ───────────────────────────────────── -->
-<section id="dataset" style="background: var(--bg-soft); border-top: 1px solid var(--border);">
+<section id="dataset" class="lane-texture" style="background: var(--concrete); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft);">
   <div class="container">
     <div class="section-head">
-      <span class="badge-sub">Dataset Schema</span>
-      <h2 class="section-title">UCI Dataset Variables</h2>
-      <p class="section-desc">
-        Metro Interstate Traffic Volume dataset (UCI ID: 492) with 8 features and 1 target.
-      </p>
+      <span class="mile-marker">Dataset schema</span>
+      <h2 class="section-title">Metro Interstate Traffic Volume</h2>
+      <p class="section-desc">UCI dataset ID 492 — 8 features, 1 target.</p>
     </div>
 
     <div class="table-box">
       <table>
         <thead>
-          <tr>
-            <th>Variable</th>
-            <th>Role</th>
-            <th>Type</th>
-            <th>Units</th>
-            <th>Description</th>
-          </tr>
+          <tr><th>Variable</th><th>Role</th><th>Type</th><th>Units</th><th>Description</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><span class="code-tag">date_time</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>DateTime</td>
-            <td>Local CST</td>
-            <td>Timestamp formatted as YYYY-MM-DD HH:MM:SS.</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">holiday</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>Categorical</td>
-            <td>Text</td>
-            <td>US national holidays and regional events.</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">temp</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>Continuous</td>
-            <td>Kelvin (K)</td>
-            <td>Average hourly ambient temperature.</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">rain_1h</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>Continuous</td>
-            <td>mm</td>
-            <td>Rainfall accumulated during the hour.</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">snow_1h</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>Continuous</td>
-            <td>mm</td>
-            <td>Snowfall accumulated during the hour.</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">clouds_all</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>Integer</td>
-            <td>%</td>
-            <td>Cloud cover percentage (0–100%).</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">weather_main</span></td>
-            <td><span class="role-badge role-feat">Feature</span></td>
-            <td>Categorical</td>
-            <td>Text</td>
-            <td>General weather category (Clear, Rain, Snow, Clouds).</td>
-          </tr>
-          <tr>
-            <td><span class="code-tag">traffic_volume</span></td>
-            <td><span class="role-badge role-targ">Target</span></td>
-            <td>Integer</td>
-            <td>Vehicles/hr</td>
-            <td>Hourly westbound traffic count on Interstate 94.</td>
-          </tr>
+          <tr><td><span class="code-tag">date_time</span></td><td><span class="role-badge role-feat">Feature</span></td><td>DateTime</td><td>Local CST</td><td>Timestamp, YYYY-MM-DD HH:MM:SS.</td></tr>
+          <tr><td><span class="code-tag">holiday</span></td><td><span class="role-badge role-feat">Feature</span></td><td>Categorical</td><td>Text</td><td>US national holidays and regional events.</td></tr>
+          <tr><td><span class="code-tag">temp</span></td><td><span class="role-badge role-feat">Feature</span></td><td>Continuous</td><td>Kelvin (K)</td><td>Average hourly ambient temperature.</td></tr>
+          <tr><td><span class="code-tag">rain_1h</span></td><td><span class="role-badge role-feat">Feature</span></td><td>Continuous</td><td>mm</td><td>Rainfall accumulated during the hour.</td></tr>
+          <tr><td><span class="code-tag">snow_1h</span></td><td><span class="role-badge role-feat">Feature</span></td><td>Continuous</td><td>mm</td><td>Snowfall accumulated during the hour.</td></tr>
+          <tr><td><span class="code-tag">clouds_all</span></td><td><span class="role-badge role-feat">Feature</span></td><td>Integer</td><td>%</td><td>Cloud cover percentage (0–100%).</td></tr>
+          <tr><td><span class="code-tag">weather_main</span></td><td><span class="role-badge role-feat">Feature</span></td><td>Categorical</td><td>Text</td><td>General category (Clear, Rain, Snow, Clouds).</td></tr>
+          <tr><td><span class="code-tag">traffic_volume</span></td><td><span class="role-badge role-targ">Target</span></td><td>Integer</td><td>Vehicles/hr</td><td>Hourly westbound traffic count on I-94.</td></tr>
         </tbody>
       </table>
     </div>
@@ -419,58 +297,21 @@
 <section id="models">
   <div class="container">
     <div class="section-head">
-      <span class="badge-sub">Machine Learning</span>
-      <h2 class="section-title">Model Benchmarking</h2>
-      <p class="section-desc">
-        Evaluation framework ready to populate with final test metrics after training.
-      </p>
+      <span class="mile-marker">Machine learning</span>
+      <h2 class="section-title">Model benchmarking</h2>
+      <p class="section-desc">Framework ready to populate with final test metrics after training.</p>
     </div>
 
     <div class="table-box">
       <table>
         <thead>
-          <tr>
-            <th>Model</th>
-            <th>Type</th>
-            <th>Test R²</th>
-            <th>MAE (Vehicles/hr)</th>
-            <th>RMSE (Vehicles/hr)</th>
-            <th>Status</th>
-          </tr>
+          <tr><th>Model</th><th>Type</th><th>Test R²</th><th>MAE (veh/hr)</th><th>RMSE (veh/hr)</th><th>Status</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><strong>Linear Regression</strong></td>
-            <td>Baseline</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td><span class="role-badge role-feat">Baseline</span></td>
-          </tr>
-          <tr>
-            <td><strong>Random Forest Regressor</strong></td>
-            <td>Tree Ensemble</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td><span class="role-badge role-feat">Candidate</span></td>
-          </tr>
-          <tr>
-            <td><strong>XGBoost Regressor</strong></td>
-            <td>Gradient Boosting</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td><span class="role-badge role-feat">Candidate</span></td>
-          </tr>
-          <tr>
-            <td><strong>LightGBM Regressor</strong></td>
-            <td>Fast Gradient Boosting</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td><span class="role-badge role-targ">Champion</span></td>
-          </tr>
+          <tr><td><strong>Linear Regression</strong></td><td>Baseline</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-feat">Baseline</span></td></tr>
+          <tr><td><strong>Random Forest Regressor</strong></td><td>Tree ensemble</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-feat">Candidate</span></td></tr>
+          <tr><td><strong>XGBoost Regressor</strong></td><td>Gradient boosting</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-feat">Candidate</span></td></tr>
+          <tr><td><strong>LightGBM Regressor</strong></td><td>Fast gradient boosting</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-targ">Champion</span></td></tr>
         </tbody>
       </table>
     </div>
