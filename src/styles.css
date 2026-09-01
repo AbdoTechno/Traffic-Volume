@@ -4,29 +4,29 @@
    amber advisory (VMS) boards — translated into a product UI.
    ------------------------------------------------------------------ */
 :root {
-  /* Core palette — grounded in real road-sign colors */
-  --hwy-green: #0B5D3B;
-  --hwy-green-deep: #073D27;
-  --hwy-green-tint: #E7F2EC;
-  --asphalt: #1B1D1F;
-  --asphalt-soft: #2C2F31;
-  --concrete: #F4F2EC;
-  --card: #FFFFFF;
+  /* Light, friendly highway-inspired palette */
+  --hwy-green: #0f7a5f;
+  --hwy-green-deep: #0b5b46;
+  --hwy-green-tint: #eafaf4;
+  --asphalt: #eaf2f7;
+  --asphalt-soft: #ffffff;
+  --concrete: #f5f8fc;
+  --card: #ffffff;
   --line-white: #FFFFFF;
 
-  --amber: #F2A900;
-  --amber-deep: #B97900;
-  --amber-tint: #FFF4DC;
+  --amber: #f4b942;
+  --amber-deep: #d28a00;
+  --amber-tint: #fff8e7;
 
-  --red: #C4291F;
-  --red-tint: #FBE6E3;
+  --red: #d85d54;
+  --red-tint: #fff0ee;
 
-  --text-main: #1B1D1F;
-  --text-muted: #5C6266;
-  --text-faint: #8A9092;
+  --text-main: #1d2a36;
+  --text-muted: #536271;
+  --text-faint: #7d8b97;
 
-  --border: #DDD9CD;
-  --border-soft: #E9E6DC;
+  --border: #dfe8ef;
+  --border-soft: #edf2f7;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -48,7 +48,7 @@ html { scroll-behavior: smooth; }
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 body {
-  background: var(--concrete);
+  background: linear-gradient(180deg, #f7fbff 0%, #f1f7fa 100%);
   color: var(--text-main);
   font-family: var(--font-body);
   font-size: 15px;
@@ -407,16 +407,16 @@ header {
 .section-desc { font-size: 15.5px; color: var(--text-muted); }
 
 /* ─── Simulator ─────────────────────────────────────────────────── */
-#simulator { background: var(--asphalt); color: var(--line-white); position: relative; }
-#simulator .mile-marker { color: var(--amber); }
-#simulator .mile-marker::before { background: var(--amber); }
-#simulator .section-title { color: var(--line-white); }
-#simulator .section-desc { color: #ADB3AF; }
+#simulator { background: linear-gradient(180deg, #f9fbff 0%, #eef6fb 100%); color: var(--text-main); position: relative; }
+#simulator .mile-marker { color: var(--hwy-green); }
+#simulator .mile-marker::before { background: var(--hwy-green); }
+#simulator .section-title { color: var(--text-main); }
+#simulator .section-desc { color: var(--text-muted); }
 .sim-card {
-  background: var(--asphalt-soft);
-  border: 1px solid #3A3E40;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 18px 40px rgba(29, 42, 54, 0.08);
   padding: 36px;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -493,16 +493,16 @@ header {
 .sim-select {
   width: 100%;
   padding: 11px 14px;
-  border: 1px solid #4A4F51;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--line-white);
-  background: #26292B;
+  color: var(--text-main);
+  background: #f9fbff;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.sim-select:focus { border-color: var(--amber); }
+.sim-select:focus { border-color: var(--hwy-green); box-shadow: 0 0 0 3px rgba(15, 122, 95, 0.08); }
 .sim-check-pill {
   display: flex;
   align-items: center;
@@ -519,11 +519,12 @@ header {
 
 /* Result panel styled like an actual roadside VMS board */
 .sim-result-box {
-  background: #101213;
-  border: 1px solid #3A3E40;
+  background: linear-gradient(180deg, #ffffff 0%, #f4f9fd 100%);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 30px;
   text-align: center;
+  color: var(--text-main);
 }
 .res-label {
   font-family: var(--font-mono);
@@ -539,7 +540,7 @@ header {
   font-size: 58px;
   font-weight: 700;
   line-height: 1;
-  color: var(--line-white);
+  color: var(--text-main);
   margin-bottom: 4px;
   font-variant-numeric: tabular-nums;
   transition: color 0.25s ease;
@@ -570,13 +571,13 @@ header {
   flex-direction: column;
   gap: 11px;
   padding-top: 18px;
-  border-top: 1px dashed #3A3E40;
+  border-top: 1px dashed var(--border);
   text-align: left;
   font-size: 13px;
 }
 .breakdown-item { display: flex; justify-content: space-between; }
-.breakdown-item span { color: #8A9290; }
-.breakdown-item strong { color: var(--line-white); font-weight: 600; font-family: var(--font-mono); font-size: 12.5px; }
+.breakdown-item span { color: var(--text-muted); }
+.breakdown-item strong { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); font-size: 12.5px; }
 
 /* ─── Insight cards ─────────────────────────────────────────────── */
 .cards-row {
@@ -642,8 +643,61 @@ tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover td { background: #FAFAF6; }
 .code-tag { font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--hwy-green-deep); }
 .role-badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); }
-.role-feat { background: #F1EFE7; color: var(--text-muted); }
+.role-feat { background: #edf4ff; color: #3f5d7c; }
 .role-targ { background: var(--amber-tint); color: var(--amber-deep); font-weight: 700; }
+
+.prod-output {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 180px;
+  justify-content: center;
+}
+.forecast-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.forecast-header strong { color: var(--text-main); }
+.forecast-header span { color: var(--text-muted); }
+.forecast-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.forecast-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 12px;
+  background: #f8fbff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.forecast-list span { color: var(--text-muted); }
+.forecast-list strong { color: var(--text-main); }
+.forecast-warning {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-main);
+  text-align: left;
+}
+.forecast-warning p {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--red);
+}
+.forecast-warning small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
 
 /* ─── Footer ─────────────────────────────────────────────────────── */
 footer { background: var(--asphalt); color: #ADB3AF; padding: 44px 0; }

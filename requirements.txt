@@ -8,3 +8,7 @@ xgboost
 lightgbm
 jupyter
 ipykernel
+fastapi
+uvicorn
+requests
+holidays

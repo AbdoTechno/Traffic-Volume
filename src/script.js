@@ -118,6 +118,81 @@ function setPreset(h, day, weather, temp, isHol) {
 });
 updateSim();
 
+const prodStartDate = document.getElementById('prod-start-date');
+const prodDays = document.getElementById('prod-days');
+const prodCity = document.getElementById('prod-city');
+const prodHour = document.getElementById('prod-hour');
+const prodOutput = document.getElementById('prod-output');
+const prodSubmit = document.getElementById('prod-submit');
+
+if (prodStartDate) {
+  const today = new Date();
+  const dateValue = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  prodStartDate.value = dateValue;
+}
+
+async function fetchProductionForecast() {
+  if (!prodStartDate || !prodDays || !prodCity || !prodHour || !prodOutput) return;
+
+  const payload = {
+    start_date: prodStartDate.value,
+    days: Number(prodDays.value || 1),
+    city: prodCity.value || 'Minneapolis',
+    country: 'US',
+    hour: Number(prodHour.value || 12)
+  };
+
+  prodOutput.innerHTML = '<p>Loading forecast...</p>';
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Request failed');
+    }
+
+    const data = await response.json();
+    const items = data.predictions || [];
+
+    if (!items.length) {
+      prodOutput.innerHTML = '<p>No forecast data returned.</p>';
+      return;
+    }
+
+    prodOutput.innerHTML = `
+      <div class="forecast-header">
+        <strong>${data.city}</strong>
+        <span>${data.days}-day outlook</span>
+      </div>
+      <ul class="forecast-list">
+        ${items.map(item => `
+          <li>
+            <span>${item.date}</span>
+            <strong>${item.predicted_traffic_volume.toLocaleString()} veh/hr</strong>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+  } catch (error) {
+    prodOutput.innerHTML = `
+      <div class="forecast-warning">
+        <p>Forecast unavailable.</p>
+        <small>${error.message || 'Failed to fetch'}</small>
+        <small>Make sure the API is running on http://127.0.0.1:8000</small>
+      </div>
+    `;
+  }
+}
+
+if (prodSubmit) {
+  prodSubmit.addEventListener('click', fetchProductionForecast);
+}
+
 /* ─── Live Minneapolis weather → advisory board ──────────────────── */
 (function () {
   const API_KEY = '6f758c1057f74c43b5f163533252311';
