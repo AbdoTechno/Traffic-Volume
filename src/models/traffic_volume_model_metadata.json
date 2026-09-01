@@ -1,0 +1,23 @@
+{
+  "model_name": "XGBoost",
+  "numerical_features": [
+    "holiday",
+    "temp",
+    "rain_1h",
+    "snow_1h",
+    "clouds_all",
+    "year",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos",
+    "day_sin",
+    "day_cos"
+  ],
+  "categorical_features": [
+    "weather_main"
+  ],
+  "scaler_path": "D:\\SIC\\Traffic Volume\\src\\models\\traffic_volume_scaler.joblib",
+  "encoder_path": "D:\\SIC\\Traffic Volume\\src\\models\\traffic_volume_encoder.joblib",
+  "pipeline_path": "D:\\SIC\\Traffic Volume\\src\\models\\traffic_volume_model_pipeline.joblib"
+}
