@@ -145,7 +145,7 @@ async function fetchProductionForecast() {
   prodOutput.innerHTML = '<p>Loading forecast...</p>';
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/predict', {
+    const response = await fetch('/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -183,7 +183,7 @@ async function fetchProductionForecast() {
       <div class="forecast-warning">
         <p>Forecast unavailable.</p>
         <small>${error.message || 'Failed to fetch'}</small>
-        <small>Make sure the API is running on http://127.0.0.1:8000</small>
+        <small>Please make sure the API is running and accessible.</small>
       </div>
     `;
   }
