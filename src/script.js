@@ -152,8 +152,20 @@ async function fetchProductionForecast() {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText || 'Request failed');
+      let errorMessage = 'Forecast unavailable.';
+      try {
+        const errorData = await response.json();
+        if (errorData.detail) {
+          if (typeof errorData.detail === 'string') {
+            errorMessage = errorData.detail;
+          } else if (Array.isArray(errorData.detail) && errorData.detail[0]?.msg) {
+            errorMessage = errorData.detail[0].msg;
+          }
+        }
+      } catch (e) {
+        // Failed to parse error response
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -179,11 +191,24 @@ async function fetchProductionForecast() {
       </ul>
     `;
   } catch (error) {
+    let userMessage = error.message || 'Failed to fetch forecast';
+    let advice = '';
+    
+    if (userMessage.includes('less than or equal to') || userMessage.includes('days')) {
+      userMessage = '📅 Maximum 3 days allowed';
+      advice = 'Please select 3 days or fewer.';
+    } else if (userMessage.includes('accessible')) {
+      userMessage = '🔗 API connection failed';
+      advice = 'The API may be temporarily unavailable.';
+    } else if (userMessage.includes('weather') || userMessage.includes('forecast')) {
+      userMessage = '⛅ Weather data unavailable';
+      advice = 'Unable to fetch weather forecast for the selected city.';
+    }
+    
     prodOutput.innerHTML = `
       <div class="forecast-warning">
-        <p>Forecast unavailable.</p>
-        <small>${error.message || 'Failed to fetch'}</small>
-        <small>Please make sure the API is running and accessible.</small>
+        <p>${userMessage}</p>
+        ${advice ? `<small>${advice}</small>` : ''}
       </div>
     `;
   }

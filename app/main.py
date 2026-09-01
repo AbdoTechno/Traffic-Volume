@@ -5,10 +5,11 @@ from pathlib import Path
 from typing import Any, Dict
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
 from src.production.feature_builder import FeatureBuilder
@@ -40,6 +41,31 @@ app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 predictor = TrafficPredictor()
 weather_client = WeatherClient()
+
+
+# Custom exception handler for validation errors
+@app.exception_handler(RequestValidationError)
+def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+    """Handle validation errors with user-friendly messages."""
+    errors = exc.errors()
+    
+    # Extract meaningful error message
+    if errors and len(errors) > 0:
+        first_error = errors[0]
+        field = first_error.get("loc", ("",))[1] if len(first_error.get("loc", ())) > 1 else ""
+        msg = first_error.get("msg", "Invalid input")
+        
+        if field == "days" and "less than or equal" in msg:
+            detail = "Number of days must be between 1 and 3."
+        else:
+            detail = msg
+    else:
+        detail = "Invalid request data."
+    
+    return JSONResponse(
+        status_code=422,
+        content={"detail": detail}
+    )
 
 
 class ForecastRequest(BaseModel):
