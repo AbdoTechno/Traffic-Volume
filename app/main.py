@@ -44,7 +44,7 @@ weather_client = WeatherClient()
 
 class ForecastRequest(BaseModel):
     start_date: str = Field(..., example="2026-09-01")
-    days: int = Field(default=7, ge=1, le=30)
+    days: int = Field(default=3, ge=1, le=3)
     city: str = Field(default="Minneapolis")
     country: str = Field(default="US")
     hour: int = Field(default=12, ge=0, le=23)
