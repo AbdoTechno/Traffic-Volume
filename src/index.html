@@ -132,6 +132,59 @@
   </div>
 </section>
 
+<section class="forecast-panel">
+  <div class="container">
+    <div class="section-head center" style="margin-left:auto;margin-right:auto;">
+      <span class="mile-marker">Production forecast</span>
+      <h2 class="section-title">Predict traffic for the next N days</h2>
+      <p class="section-desc">Enter only the basics. The app will compute the missing features from the date and live weather.</p>
+    </div>
+
+    <div class="sim-card prod-card">
+      <div class="api-form">
+        <div class="form-group">
+          <label for="prod-start-date" class="form-label">Start date</label>
+          <input id="prod-start-date" type="date" class="sim-select" />
+        </div>
+
+        <div class="form-group">
+          <label for="prod-days" class="form-label">Number of days</label>
+          <input id="prod-days" type="number" min="1" max="30" value="7" class="sim-select" />
+        </div>
+
+        <div class="form-group">
+          <label for="prod-city" class="form-label">City</label>
+          <select id="prod-city" class="sim-select">
+            <option value="Minneapolis" selected>Minneapolis</option>
+            <option value="Chicago">Chicago</option>
+            <option value="Boston">Boston</option>
+            <option value="Seattle">Seattle</option>
+            <option value="Denver">Denver</option>
+            <option value="Austin">Austin</option>
+            <option value="Phoenix">Phoenix</option>
+            <option value="Atlanta">Atlanta</option>
+            <option value="Miami">Miami</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="prod-hour" class="form-label">Hour</label>
+          <input id="prod-hour" type="number" min="0" max="23" value="12" class="sim-select" />
+        </div>
+
+        <button id="prod-submit" class="btn btn-primary" type="button">Get forecast</button>
+      </div>
+
+      <div class="sim-result-box">
+        <div class="res-label">Production prediction</div>
+        <div id="prod-output" class="prod-output">
+          <p>Waiting for forecast...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── Interactive Traffic Simulator ─────────────────────────────── -->
 <section id="simulator">
   <div class="container">
@@ -305,13 +358,12 @@
     <div class="table-box">
       <table>
         <thead>
-          <tr><th>Model</th><th>Type</th><th>Test R²</th><th>MAE (veh/hr)</th><th>RMSE (veh/hr)</th><th>Status</th></tr>
+          <tr><th>Model</th><th>MAE</th><th>RMSE</th><th>R²</th><th>Status</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Linear Regression</strong></td><td>Baseline</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-feat">Baseline</span></td></tr>
-          <tr><td><strong>Random Forest Regressor</strong></td><td>Tree ensemble</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-feat">Candidate</span></td></tr>
-          <tr><td><strong>XGBoost Regressor</strong></td><td>Gradient boosting</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-feat">Candidate</span></td></tr>
-          <tr><td><strong>LightGBM Regressor</strong></td><td>Fast gradient boosting</td><td>—</td><td>—</td><td>—</td><td><span class="role-badge role-targ">Champion</span></td></tr>
+          <tr><td><strong>XGBoost</strong></td><td>241.99</td><td>397.13</td><td>0.9594</td><td><span class="role-badge role-targ">Champion</span></td></tr>
+          <tr><td><strong>Random Forest</strong></td><td>254.12</td><td>419.87</td><td>0.9546</td><td><span class="role-badge role-feat">Strong runner-up</span></td></tr>
+          <tr><td><strong>Linear Regression</strong></td><td>837.64</td><td>1077.51</td><td>0.7009</td><td><span class="role-badge role-feat">Baseline</span></td></tr>
         </tbody>
       </table>
     </div>
