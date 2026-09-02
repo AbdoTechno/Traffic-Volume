@@ -1,22 +1,17 @@
 from __future__ import annotations
 
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
-
-import pandas as pd
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel, Field
 
-from src.production.feature_builder import FeatureBuilder
-from src.production.predictor import TrafficPredictor
-from src.production.weather_client import WeatherClient
+from app.routers.forecast import router as forecast_router
 
-app = FastAPI(title="Traffic Volume Forecast API", version="1.0.0")
+app = FastAPI(title="Traffic Volume Forecast API", version="2.0.0")
+
+# ── CORS Middleware ──────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -35,108 +30,49 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-static_path = Path(__file__).parent.parent / "src"
-app.mount("/static", StaticFiles(directory=static_path), name="static")
 
-predictor = TrafficPredictor()
-weather_client = WeatherClient()
-
-
-# Custom exception handler for validation errors
+# ── Validation Error Handler ─────────────────────────────────────────────────
 @app.exception_handler(RequestValidationError)
 def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
-    """Handle validation errors with user-friendly messages."""
+    """Return user-friendly validation error messages."""
     errors = exc.errors()
-    
-    # Extract meaningful error message
-    if errors and len(errors) > 0:
-        first_error = errors[0]
-        field = first_error.get("loc", ("",))[1] if len(first_error.get("loc", ())) > 1 else ""
-        msg = first_error.get("msg", "Invalid input")
-        
+    if errors:
+        first = errors[0]
+        field = first.get("loc", ("",))[1] if len(first.get("loc", ())) > 1 else ""
+        msg = first.get("msg", "Invalid input")
         if field == "days" and "less than or equal" in msg:
             detail = "Number of days must be between 1 and 3."
+        elif field in ("start_hour", "end_hour"):
+            detail = "Hours must be between 0 and 23."
+        elif "end_hour" in str(first.get("loc", "")):
+            detail = "End hour must be greater than or equal to start hour."
         else:
             detail = msg
     else:
         detail = "Invalid request data."
-    
-    return JSONResponse(
-        status_code=422,
-        content={"detail": detail}
-    )
+    return JSONResponse(status_code=422, content={"detail": detail})
 
 
-class ForecastRequest(BaseModel):
-    start_date: str = Field(..., example="2026-09-01")
-    days: int = Field(default=3, ge=1, le=3)
-    city: str = Field(default="Minneapolis")
-    country: str = Field(default="US")
-    hour: int = Field(default=12, ge=0, le=23)
+# ── Mount Static Files ───────────────────────────────────────────────────────
+static_path = Path(__file__).parent.parent / "src"
+app.mount("/static", StaticFiles(directory=static_path), name="static")
+app.mount("/js", StaticFiles(directory=static_path / "js"), name="js")
 
 
+@app.get("/styles.css")
+def get_styles() -> FileResponse:
+    """Serve styles.css at root for relative path compatibility."""
+    return FileResponse(static_path / "styles.css", media_type="text/css")
+
+
+# ── Include Routers ──────────────────────────────────────────────────────────
+app.include_router(forecast_router)
+
+
+# ── Frontend Dashboard Route ─────────────────────────────────────────────────
 @app.get("/")
 def home() -> FileResponse:
     """Serve the frontend dashboard."""
-    index_path = Path(__file__).parent.parent / "src" / "index.html"
+    index_path = static_path / "index.html"
     return FileResponse(index_path, media_type="text/html")
 
-
-@app.get("/api/health")
-def health_check() -> Dict[str, str]:
-    """API health check endpoint."""
-    return {"status": "ok", "message": "Traffic Volume Forecast API is running"}
-
-
-@app.post("/predict")
-def predict(request: ForecastRequest) -> Dict[str, Any]:
-    try:
-        forecast_rows = weather_client.fetch_forecast_for_city(request.city, request.country, request.days)
-        if len(forecast_rows) < request.days:
-            raise HTTPException(status_code=400, detail="Not enough weather forecast rows returned for the requested period.")
-
-        df = FeatureBuilder.build_feature_frame(
-            start_date=request.start_date,
-            days=request.days,
-            weather_rows=forecast_rows,
-            hour=request.hour,
-        )
-        predictions = predictor.model.predict(df)
-
-        results = []
-        for index, prediction in enumerate(predictions):
-            date_value = pd.to_datetime(request.start_date) + pd.Timedelta(days=index)
-            results.append({
-                "date": date_value.strftime("%Y-%m-%d"),
-                "hour": request.hour,
-                "predicted_traffic_volume": round(float(prediction), 2),
-            })
-
-        return {
-            "city": request.city,
-            "country": request.country,
-            "start_date": request.start_date,
-            "days": request.days,
-            "hour": request.hour,
-            "predictions": results,
-        }
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc)) from exc
-
-
-@app.post("/predict-single")
-def predict_single(date: str, hour: int = 12, city: str = "Minneapolis", country: str = "US") -> Dict[str, Any]:
-    try:
-        weather = weather_client.fetch_weather_for_city(city, country)
-        row = FeatureBuilder.build_row_for_datetime(datetime.strptime(date, "%Y-%m-%d"), hour, weather)
-        prediction = predictor.model.predict(pd.DataFrame([row]))[0]
-        return {
-            "date": date,
-            "hour": hour,
-            "city": city,
-            "predicted_traffic_volume": round(float(prediction), 2),
-            "features": row,
-        }
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc)) from exc

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Dict, List, Any
 
 import numpy as np
@@ -9,7 +9,16 @@ import holidays
 
 
 class FeatureBuilder:
-    """Build all production features for traffic prediction from minimal user input."""
+    """
+    Build all production features for traffic prediction.
+
+    Feature schema exactly matches notebook 04.1_modeling_trial.ipynb:
+      Columns: holiday, temp, rain_1h, snow_1h, clouds_all, weather_main,
+               day_of_week, hour_sin, hour_cos, month_sin, month_cos
+      - holiday    : str  → "Not Holiday" or holiday name (text → OHE)
+      - day_of_week: str  → "Monday" / "Tuesday" / … (text → OHE)
+      - weather_main: str → "Clear" / "Rain" / … (text → OHE)
+    """
 
     @staticmethod
     def build_forecast_dates(start_date: str, days: int) -> List[datetime]:
@@ -24,63 +33,92 @@ class FeatureBuilder:
         }
 
     @staticmethod
-    def is_holiday(date_value: datetime) -> int:
+    def get_holiday_label(date_value: datetime) -> str:
+        """Return the US holiday name, or 'Not Holiday'."""
         us_holidays = holidays.US(years=date_value.year)
-        return 1 if date_value.date() in us_holidays else 0
+        name = us_holidays.get(date_value.date())
+        return name if name else "Not Holiday"
 
     @staticmethod
-    def get_day_of_week_features(date_value: datetime) -> Dict[str, float]:
-        day_index = date_value.weekday()
-        return {
-            "day_of_week_num": float(day_index),
-            "day_sin": float(np.sin(2 * np.pi * day_index / 7)),
-            "day_cos": float(np.cos(2 * np.pi * day_index / 7)),
-        }
+    def get_day_of_week(date_value: datetime) -> str:
+        """Return full weekday name matching the cleaned CSV ('Monday', 'Tuesday', …)."""
+        return date_value.strftime("%A")
 
     @staticmethod
-    def build_row_for_datetime(date_value: datetime, hour: int, weather_data: Dict[str, Any]) -> Dict[str, Any]:
-        weather_main = weather_data.get("weather_main", "Clear")
-        weather_main = str(weather_main).title().strip()
-
-        numerical = {
-            "holiday": FeatureBuilder.is_holiday(date_value),
-            "temp": float(weather_data.get("temp", 20.0)),
-            "rain_1h": float(weather_data.get("rain_1h", 0.0)),
-            "snow_1h": float(weather_data.get("snow_1h", 0.0)),
-            "clouds_all": float(weather_data.get("clouds_all", 0.0)),
-            "year": float(date_value.year),
-            "hour": float(hour),
-            "month": float(date_value.month),
-        }
+    def build_row_for_datetime(
+        date_value: datetime,
+        hour: int,
+        weather_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Build one feature row identical to what the training notebook produces
+        after dropping ["traffic_volume", "date_time", "hour", "month"].
+        """
+        weather_main = str(weather_data.get("weather_main", "Clear")).strip().title()
 
         hour_cyc = FeatureBuilder.compute_cyclical(hour, 24)
         month_cyc = FeatureBuilder.compute_cyclical(date_value.month, 12)
-        day_cfg = FeatureBuilder.get_day_of_week_features(date_value)
 
-        row = {
-            **numerical,
-            "hour_sin": hour_cyc["sin"],
-            "hour_cos": hour_cyc["cos"],
+        return {
+            # --- categorical (OHE in pipeline) ---
+            "holiday":      FeatureBuilder.get_holiday_label(date_value),
+            "weather_main": weather_main,
+            "day_of_week":  FeatureBuilder.get_day_of_week(date_value),
+            # --- numerical (StandardScaler in pipeline) ---
+            "temp":      float(weather_data.get("temp", 293.0)),
+            "rain_1h":   float(weather_data.get("rain_1h", 0.0)),
+            "snow_1h":   float(weather_data.get("snow_1h", 0.0)),
+            "clouds_all": float(weather_data.get("clouds_all", 0.0)),
+            "hour_sin":  hour_cyc["sin"],
+            "hour_cos":  hour_cyc["cos"],
             "month_sin": month_cyc["sin"],
             "month_cos": month_cyc["cos"],
-            "day_sin": day_cfg["day_sin"],
-            "day_cos": day_cfg["day_cos"],
-            "weather_main": weather_main,
         }
-        return row
 
     @staticmethod
-    def build_feature_frame(start_date: str, days: int, weather_rows: List[Dict[str, Any]], hour: int = 12) -> pd.DataFrame:
+    def build_feature_frame(
+        start_date: str,
+        days: int,
+        weather_rows: List[Dict[str, Any]],
+        hour: int = 12,
+    ) -> pd.DataFrame:
+        """Build a DataFrame for `days` rows at a fixed hour."""
         dates = FeatureBuilder.build_forecast_dates(start_date, days)
         rows = []
-
         for idx, date_value in enumerate(dates):
             weather = weather_rows[idx] if idx < len(weather_rows) else weather_rows[-1]
             rows.append(FeatureBuilder.build_row_for_datetime(date_value, hour, weather))
-
         return pd.DataFrame(rows)
 
+    @staticmethod
+    def build_feature_frame_hour_range(
+        start_date: str,
+        days: int,
+        weather_rows: List[Dict[str, Any]],
+        start_hour: int = 0,
+        end_hour: int = 23,
+    ) -> List[Dict[str, Any]]:
+        """
+        Build rows for every (day, hour) combination in the hour range [start_hour, end_hour].
+        Returns a list of dicts each with a 'df' key (single-row DataFrame) plus 'date' and 'hour'.
+        """
+        dates = FeatureBuilder.build_forecast_dates(start_date, days)
+        records = []
+        for idx, date_value in enumerate(dates):
+            weather = weather_rows[idx] if idx < len(weather_rows) else weather_rows[-1]
+            for h in range(start_hour, end_hour + 1):
+                row = FeatureBuilder.build_row_for_datetime(date_value, h, weather)
+                records.append({
+                    "date": date_value,
+                    "hour": h,
+                    "df": pd.DataFrame([row]),
+                })
+        return records
 
+
+# ---------------------------------------------------------------------------
+# Weather normalisation (unchanged)
+# ---------------------------------------------------------------------------
 WEATHER_MAIN_MAP = {
     "Clear": "Clear",
     "Clouds": "Clouds",
