@@ -4,29 +4,29 @@
    amber advisory (VMS) boards — translated into a product UI.
    ------------------------------------------------------------------ */
 :root {
-  /* Core palette — grounded in real road-sign colors */
-  --hwy-green: #0B5D3B;
-  --hwy-green-deep: #073D27;
-  --hwy-green-tint: #E7F2EC;
-  --asphalt: #1B1D1F;
-  --asphalt-soft: #2C2F31;
-  --concrete: #F4F2EC;
-  --card: #FFFFFF;
+  /* Light, friendly highway-inspired palette */
+  --hwy-green: #0f7a5f;
+  --hwy-green-deep: #0b5b46;
+  --hwy-green-tint: #eafaf4;
+  --asphalt: #eaf2f7;
+  --asphalt-soft: #ffffff;
+  --concrete: #f5f8fc;
+  --card: #ffffff;
   --line-white: #FFFFFF;
 
-  --amber: #F2A900;
-  --amber-deep: #B97900;
-  --amber-tint: #FFF4DC;
+  --amber: #f4b942;
+  --amber-deep: #d28a00;
+  --amber-tint: #fff8e7;
 
-  --red: #C4291F;
-  --red-tint: #FBE6E3;
+  --red: #d85d54;
+  --red-tint: #fff0ee;
 
-  --text-main: #1B1D1F;
-  --text-muted: #5C6266;
-  --text-faint: #8A9092;
+  --text-main: #1d2a36;
+  --text-muted: #536271;
+  --text-faint: #7d8b97;
 
-  --border: #DDD9CD;
-  --border-soft: #E9E6DC;
+  --border: #dfe8ef;
+  --border-soft: #edf2f7;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -48,7 +48,7 @@ html { scroll-behavior: smooth; }
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 body {
-  background: var(--concrete);
+  background: linear-gradient(180deg, #f7fbff 0%, #f1f7fa 100%);
   color: var(--text-main);
   font-family: var(--font-body);
   font-size: 15px;
@@ -407,16 +407,16 @@ header {
 .section-desc { font-size: 15.5px; color: var(--text-muted); }
 
 /* ─── Simulator ─────────────────────────────────────────────────── */
-#simulator { background: var(--asphalt); color: var(--line-white); position: relative; }
-#simulator .mile-marker { color: var(--amber); }
-#simulator .mile-marker::before { background: var(--amber); }
-#simulator .section-title { color: var(--line-white); }
-#simulator .section-desc { color: #ADB3AF; }
+#simulator { background: linear-gradient(180deg, #f9fbff 0%, #eef6fb 100%); color: var(--text-main); position: relative; }
+#simulator .mile-marker { color: var(--hwy-green); }
+#simulator .mile-marker::before { background: var(--hwy-green); }
+#simulator .section-title { color: var(--text-main); }
+#simulator .section-desc { color: var(--text-muted); }
 .sim-card {
-  background: var(--asphalt-soft);
-  border: 1px solid #3A3E40;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 18px 40px rgba(29, 42, 54, 0.08);
   padding: 36px;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -493,16 +493,16 @@ header {
 .sim-select {
   width: 100%;
   padding: 11px 14px;
-  border: 1px solid #4A4F51;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--line-white);
-  background: #26292B;
+  color: var(--text-main);
+  background: #f9fbff;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.sim-select:focus { border-color: var(--amber); }
+.sim-select:focus { border-color: var(--hwy-green); box-shadow: 0 0 0 3px rgba(15, 122, 95, 0.08); }
 .sim-check-pill {
   display: flex;
   align-items: center;
@@ -519,11 +519,12 @@ header {
 
 /* Result panel styled like an actual roadside VMS board */
 .sim-result-box {
-  background: #101213;
-  border: 1px solid #3A3E40;
+  background: linear-gradient(180deg, #ffffff 0%, #f4f9fd 100%);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 30px;
   text-align: center;
+  color: var(--text-main);
 }
 .res-label {
   font-family: var(--font-mono);
@@ -539,7 +540,7 @@ header {
   font-size: 58px;
   font-weight: 700;
   line-height: 1;
-  color: var(--line-white);
+  color: var(--text-main);
   margin-bottom: 4px;
   font-variant-numeric: tabular-nums;
   transition: color 0.25s ease;
@@ -570,13 +571,13 @@ header {
   flex-direction: column;
   gap: 11px;
   padding-top: 18px;
-  border-top: 1px dashed #3A3E40;
+  border-top: 1px dashed var(--border);
   text-align: left;
   font-size: 13px;
 }
 .breakdown-item { display: flex; justify-content: space-between; }
-.breakdown-item span { color: #8A9290; }
-.breakdown-item strong { color: var(--line-white); font-weight: 600; font-family: var(--font-mono); font-size: 12.5px; }
+.breakdown-item span { color: var(--text-muted); }
+.breakdown-item strong { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); font-size: 12.5px; }
 
 /* ─── Insight cards ─────────────────────────────────────────────── */
 .cards-row {
@@ -642,8 +643,370 @@ tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover td { background: #FAFAF6; }
 .code-tag { font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--hwy-green-deep); }
 .role-badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); }
-.role-feat { background: #F1EFE7; color: var(--text-muted); }
+.role-feat { background: #edf4ff; color: #3f5d7c; }
 .role-targ { background: var(--amber-tint); color: var(--amber-deep); font-weight: 700; }
+
+/* ─── Production Forecast Card ───────────────────────────────────── */
+.forecast-panel { background: linear-gradient(180deg, #f9fbff 0%, #eef6fb 100%); }
+
+.prod-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 40px rgba(29, 42, 54, 0.08);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  min-height: 480px;
+}
+
+.prod-form-grid {
+  padding: 36px;
+  background: #f5f9fd;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prod-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group-prod { display: flex; flex-direction: column; gap: 7px; }
+.form-label-prod {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.prod-input {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-main);
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.prod-input:focus { border-color: var(--hwy-green); box-shadow: 0 0 0 3px rgba(15,122,95,0.08); }
+
+/* Hour range panel */
+.hour-range-panel {
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.hour-range-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+}
+.hour-range-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--hwy-green);
+  background: var(--hwy-green-tint);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.hour-sliders { display: flex; flex-direction: column; gap: 10px; }
+.hour-slider-group {
+  display: grid;
+  grid-template-columns: 32px 1fr 46px;
+  align-items: center;
+  gap: 10px;
+}
+.hour-slider-label { font-size: 11.5px; color: var(--text-faint); font-weight: 600; }
+.hour-slider {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.hour-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--hwy-green);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(15,122,95,0.15);
+  transition: transform 0.1s;
+}
+.hour-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.hour-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--hwy-green); border: none; cursor: pointer;
+}
+.hour-slider-val {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--hwy-green);
+  text-align: right;
+}
+.hour-range-track {
+  position: relative;
+  height: 4px;
+  background: var(--border-soft);
+  border-radius: 3px;
+  margin: 0 42px;
+}
+.hour-range-fill {
+  position: absolute;
+  top: 0; bottom: 0;
+  background: var(--hwy-green);
+  border-radius: 3px;
+  opacity: 0.35;
+  transition: left 0.1s, width 0.1s;
+}
+
+.btn-forecast {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  margin-top: auto;
+}
+
+/* ─── Output panel ────────────────────────────────────────────── */
+.prod-output-panel {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+.prod-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.prod-output-status {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.status-ok  { background: var(--hwy-green-tint); color: var(--hwy-green); }
+.status-err { background: var(--red-tint); color: var(--red); }
+
+.prod-output {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 200px;
+}
+.prod-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-faint);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px;
+}
+.prod-loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ─── Spinner ─────────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+}
+.spinner-lg {
+  width: 32px; height: 32px;
+  border-color: var(--border);
+  border-top-color: var(--hwy-green);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Forecast meta bar ───────────────────────────────────────── */
+.forecast-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border);
+}
+.forecast-meta-city, .forecast-meta-range {
+  display: flex; align-items: center; gap: 5px; font-weight: 500;
+}
+
+/* ─── Day cards ───────────────────────────────────────────────── */
+.forecast-days { display: flex; flex-direction: column; gap: 16px; }
+
+.day-card {
+  background: #f8fbff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.day-card:hover { box-shadow: var(--shadow-md); }
+
+.day-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #fff;
+  border-bottom: 1px solid var(--border-soft);
+}
+.day-card-date strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.day-card-date span { font-size: 12px; color: var(--text-faint); }
+.day-card-avg { margin-left: auto; text-align: right; }
+.day-avg-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+}
+.day-avg-label { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+
+.day-peak-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  background: #f0f6ff;
+  border-bottom: 1px solid var(--border-soft);
+}
+.day-peak-row strong { color: var(--text-main); }
+.peak-chip { margin-left: auto; }
+
+/* ─── Hourly bar chart ────────────────────────────────────────── */
+.hourly-bars {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hourly-row {
+  display: grid;
+  grid-template-columns: 46px 1fr 64px;
+  align-items: center;
+  gap: 10px;
+}
+.hourly-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 600;
+}
+.hourly-bar-wrap {
+  background: var(--border-soft);
+  border-radius: 3px;
+  height: 8px;
+  overflow: hidden;
+}
+.hourly-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.hourly-vol {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ─── Traffic level chips ─────────────────────────────────────── */
+.level-chip, .peak-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.level-heavy, .hourly-bar.level-heavy { background: rgba(216,93,84,0.15); color: #d85d54; }
+.level-heavy.hourly-bar { background: #d85d54; }
+.level-mod, .hourly-bar.level-mod { background: rgba(244,185,66,0.18); color: #d28a00; }
+.level-mod.hourly-bar { background: #f4b942; }
+.level-normal, .hourly-bar.level-normal { background: rgba(15,122,95,0.12); color: #0f7a5f; }
+.level-normal.hourly-bar { background: #0f7a5f; }
+.level-light, .hourly-bar.level-light { background: rgba(83,98,113,0.12); color: #536271; }
+.level-light.hourly-bar { background: #adb5bd; }
+
+.prod-no-data { color: var(--text-muted); font-size: 14px; padding: 20px; }
+
+.forecast-warning {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-main);
+  padding: 20px;
+}
+.forecast-warning p {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+}
+.forecast-warning small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .prod-card { grid-template-columns: 1fr; }
+  .prod-form-grid { border-right: none; border-bottom: 1px solid var(--border); }
+}
 
 /* ─── Footer ─────────────────────────────────────────────────────── */
 footer { background: var(--asphalt); color: #ADB3AF; padding: 44px 0; }
