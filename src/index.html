@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>I-94 Traffic AI — Smart Traffic &amp; Weather Forecast</title>
+  <title>MetroFlow AI — I-94 Traffic &amp; Weather Intelligence</title>
   <meta name="description" content="A predictive traffic and weather platform for Interstate 94 between Minneapolis and St. Paul. Forecast traffic volume for any hour range using XGBoost ML model." />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -15,25 +16,53 @@
 <!-- ─── Navigation Header ────────────────────────────────────────── -->
 <header>
   <div class="nav-wrap">
-    <a href="#" class="logo">
-      <svg class="shield" width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M20 2 L37 8 V20 C37 29 30 35 20 38 C10 35 3 29 3 20 V8 Z" fill="#0B5D3B" stroke="#FFFFFF" stroke-width="2.4"/>
-        <path d="M11 22 H29 M11 22 L14 17 H26 L29 22" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="14.5" cy="26" r="1.6" fill="#FFFFFF"/>
-        <circle cx="25.5" cy="26" r="1.6" fill="#FFFFFF"/>
-      </svg>
-      Traffic<b>AI</b>
+    <a href="#" class="logo" aria-label="MetroFlow AI Homepage">
+      <div class="logo-shield-wrap">
+        <svg class="shield-icon" width="34" height="34" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="headerShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0f766e"/>
+              <stop offset="50%" stop-color="#047857"/>
+              <stop offset="100%" stop-color="#064e3b"/>
+            </linearGradient>
+          </defs>
+          <path d="M32 4 C48 4 60 12 60 26 C60 44 44 56 32 60 C20 56 4 44 4 26 C4 12 16 4 32 4 Z" fill="url(#headerShieldGrad)" stroke="#FFFFFF" stroke-width="2.5"/>
+          <path d="M22 54 L30 24 L34 24 L42 54 Z" fill="#1e293b"/>
+          <line x1="32" y1="26" x2="32" y2="33" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+          <line x1="32" y1="38" x2="32" y2="47" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="32" cy="22" r="3.5" fill="#38bdf8"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="brand-title">Metro<b>Flow</b> <span class="brand-ai">AI</span></span>
+        <span class="brand-badge">I-94 TWIN CITIES</span>
+      </div>
     </a>
 
-    <ul class="nav-links">
-      <li><a href="#forecast">Forecast</a></li>
-      <li><a href="#simulator">Simulator</a></li>
-      <li><a href="#factors">Insights</a></li>
-      <li><a href="#dataset">Dataset</a></li>
-      <li><a href="#models">Models</a></li>
-    </ul>
+    <!-- Mobile Hamburger Button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-    <a href="#forecast" class="btn btn-primary">Try the forecast</a>
+    <!-- Nav Links & CTA Wrapper -->
+    <div class="nav-menu-wrapper" id="nav-menu-wrapper">
+      <ul class="nav-links">
+        <li><a href="#forecast">Forecast</a></li>
+        <li><a href="#simulator">Simulator</a></li>
+        <li><a href="#factors">Insights</a></li>
+        <li><a href="#dataset">Dataset</a></li>
+        <li><a href="#models">Models</a></li>
+      </ul>
+
+      <a href="#forecast" class="btn btn-primary nav-cta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+        Try forecast
+      </a>
+    </div>
   </div>
 </header>
 
@@ -434,6 +463,7 @@
   </div>
 </footer>
 
+<script src="./js/navigation.js"></script>
 <script src="./js/weather-board.js"></script>
 <script src="./js/simulator.js"></script>
 <script src="./js/forecast.js"></script>
