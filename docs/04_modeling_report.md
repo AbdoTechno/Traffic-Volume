@@ -1,56 +1,57 @@
 # Traffic Volume Prediction — Modeling Report
 
-**Author:** Zeina Mostafa Ali
+**Project:** Metro Interstate Traffic Volume  
+**Task:** Supervised Time-Series Regression  
+**Target Variable:** `traffic_volume` (Vehicles per hour)
 
-## Problem Classification
+---
 
-This is a **regression problem**, since the target variable — `traffic_volume` — is continuous.
+## 1. Problem Classification
+This is a **regression problem** because the target variable — `traffic_volume` — represents continuous vehicle counts ranging from 0 to 7,280 vehicles/hour.
 
-## Data Preparation & Feature Engineering
+---
 
-The cleaned traffic dataset (`traffic_volume_cleaned.csv`) was loaded and prepared as follows:
+## 2. Data Preparation & Feature Engineering
+The cleaned traffic dataset (`traffic_volume_cleaned.csv`) was prepared following the methodology in `notebooks/04.1_modeling_trial.ipynb`:
 
-- **Datetime parsing**: `date_time` was converted to a proper datetime type, and the data was sorted chronologically.
-- **Derived time features**: `year` and a numeric day-of-week (`day_of_week_num`) were extracted from `date_time`.
-- **Cyclical encoding**: hour, month, and day-of-week were encoded using sine/cosine transforms (`hour_sin`/`hour_cos`, `month_sin`/`month_cos`, `day_sin`/`day_cos`) so the model understands that, for example, 11 PM and midnight are close together rather than far apart numerically.
-- **Holiday encoding**: the `holiday` column was converted into a simple binary flag (`1` = holiday, `0` = not holiday).
-- **Feature/target split**: redundant or non-numeric columns (`date_time`, raw `hour`, `month`, `day_of_week`, `day_of_week_num`) were dropped in favor of their cyclical/derived versions, leaving a clean feature set `X` and target `y`.
+- **Datetime Parsing & Chronological Ordering:** Data was sorted strictly by `date_time` ascending.
+- **Cyclical Encoding:** The hour of the day (0–23) and month (1–12) were transformed into continuous sine and cosine waves:
+  $$\text{hour\_sin} = \sin(2\pi \cdot \text{hour} / 24), \quad \text{hour\_cos} = \cos(2\pi \cdot \text{hour} / 24)$$
+  $$\text{month\_sin} = \sin(2\pi \cdot \text{month} / 12), \quad \text{month\_cos} = \cos(2\pi \cdot \text{month} / 12)$$
+- **Categorical Preservation:** `holiday` (e.g. `"Not Holiday"`, `"Thanksgiving"`), `day_of_week` (`"Monday"`, ..., `"Sunday"`), and `weather_main` (`"Clear"`, `"Rain"`, ...) were preserved as categorical labels for robust one-hot encoding.
+- **Feature Matrix Split:** Raw `date_time`, integer `hour`, and integer `month` were removed from the training matrix `X` to eliminate collinear redundancy with their cyclical representations.
 
-## Train/Test Split
+---
 
-Since this is time-ordered data, a **chronological (time-based) split** was used instead of a random split — the earliest 80% of records were used for training and the most recent 20% for testing. This mirrors how the model would actually be used in practice: predicting future traffic from past patterns.
+## 3. Train/Test Split
+A **chronological split** (80% train / 20% test) was used:
+- **Training Samples:** 32,451 observations.
+- **Testing Samples:** 8,113 observations.
+- This chronological split prevents look-ahead bias and accurately simulates forecasting future unseen traffic.
 
-## Preprocessing
+---
 
-A shared preprocessing pipeline was built with `ColumnTransformer`:
+## 4. Preprocessing Pipeline
+A unified `ColumnTransformer` was embedded inside each candidate pipeline:
+- **Numerical Features (8):** `["temp", "rain_1h", "snow_1h", "clouds_all", "hour_sin", "hour_cos", "month_sin", "month_cos"]` standardized with `StandardScaler()`.
+- **Categorical Features (3):** `["holiday", "weather_main", "day_of_week"]` transformed with `OneHotEncoder(drop='first', handle_unknown='ignore', sparse_output=False)`.
 
-- **Numerical features** (`holiday`, `temp`, `rain_1h`, `snow_1h`, `clouds_all`, `year`, and the cyclical hour/month/day features) were standardized with `StandardScaler`.
-- **Categorical feature** (`weather_main`) was one-hot encoded with `OneHotEncoder`.
+---
 
-This same preprocessor was reused inside every model's pipeline to keep the comparison fair and consistent.
+## 5. Model Benchmarking & Results
 
-## Model Selection
+| Model Architecture | Hyperparameters | MAE (Veh/hr) | RMSE (Veh/hr) | $R^2$ Score |
+| :--- | :--- | :---: | :---: | :---: |
+| **XGBoost Regressor** | `n_estimators=300, lr=0.05, max_depth=6` | **234.07** | **379.52** | **0.9629** |
+| **Random Forest Regressor** | `n_estimators=200, random_state=42` | 250.92 | 411.27 | 0.9564 |
+| **Linear Regression** | Default baseline | 821.57 | 1042.94 | 0.7198 |
 
-Three regression models were trained and compared:
+---
 
-1. **Linear Regression** — a simple baseline to establish how much of the variance can be explained linearly.
-2. **Random Forest Regressor** — an ensemble of decision trees, able to capture nonlinear relationships and feature interactions.
-3. **XGBoost Regressor** — a gradient-boosted tree ensemble, generally strong on tabular data with mixed numeric/categorical features.
-
-## Evaluation & Validation
-
-Each model was evaluated on the held-out test set using three metrics:
-
-- **MAE** (Mean Absolute Error)
-- **RMSE** (Root Mean Squared Error)
-- **R²** (coefficient of determination)
-
-| Model | MAE | RMSE | R² |
-|---|---|---|---|
-| **XGBoost** | 242.0 | 397.1 | **0.959** |
-| Random Forest | 254.1 | 419.9 | 0.955 |
-| Linear Regression | 837.6 | 1077.5 | 0.701 |
-
-## Best Model
-
-**XGBoost** was selected as the final model. It achieved the lowest error (MAE and RMSE) and the highest R² (≈0.96), meaning it explains about 96% of the variance in traffic volume on unseen data. Random Forest performed nearly as well, while Linear Regression lagged significantly behind — expected, since traffic volume depends on nonlinear interactions between time of day, weather, and holidays that a purely linear model cannot capture.
+## 6. Model Selection & Generalization Check
+- **Selected Champion:** **XGBoost Regressor** achieved the highest $R^2$ (0.963) and lowest MAE (234.07 veh/hr).
+- **Overfitting Verification:**
+  - Training $R^2 = 0.9689$, Training MAE = 219.55.
+  - Test $R^2 = 0.9629$, Test MAE = 234.07.
+  - The close convergence between training and testing metrics confirms that the model generalizes robustly without overfitting.
+- The pipeline was exported to `src/models/traffic_volume_model_pipeline.joblib` for live production serving via FastAPI.
