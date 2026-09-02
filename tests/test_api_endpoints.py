@@ -23,12 +23,19 @@ def test_static_styles_at_root():
 
 
 def test_static_js_modules():
-    for script_name in ["simulator.js", "forecast.js", "weather-board.js"]:
+    for script_name in ["simulator.js", "forecast.js", "weather-board.js", "navigation.js"]:
         response = client.get(f"/js/{script_name}")
         assert response.status_code == 200, f"Failed to load /js/{script_name}"
+
+
+def test_favicon_endpoints():
+    for path in ["/favicon.svg", "/favicon.ico"]:
+        response = client.get(path)
+        assert response.status_code == 200, f"Failed to load {path}"
 
 
 def test_static_mount_backward_compatibility():
     response = client.get("/static/styles.css")
     assert response.status_code == 200
+
 

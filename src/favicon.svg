@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Interstate Shield Path with Drop Shadow -->
+  <path d="M32 4 C48 4 60 12 60 26 C60 44 44 56 32 60 C20 56 4 44 4 26 C4 12 16 4 32 4 Z" 
+        fill="url(#shieldGrad)" 
+        stroke="#ffffff" 
+        stroke-width="2.5" 
+        filter="url(#shadow)"/>
+
+  <!-- Inner ambient glow -->
+  <path d="M32 7 C45 7 56 14 56 26 C56 41 42 52 32 56 C22 52 8 41 8 26 C8 14 19 7 32 7 Z" 
+        fill="url(#glowGrad)"/>
+
+  <!-- Highway Road Perspective -->
+  <path d="M22 54 L30 24 L34 24 L42 54 Z" fill="#1e293b"/>
+  <!-- Road Center Dashed Line -->
+  <line x1="32" y1="26" x2="32" y2="33" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+  <line x1="32" y1="38" x2="32" y2="47" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- AI Pulse Nodes & Signal at the Horizon -->
+  <circle cx="32" cy="22" r="3.5" fill="#38bdf8"/>
+  <circle cx="32" cy="22" r="6" stroke="#38bdf8" stroke-width="1.2" opacity="0.6"/>
+  <path d="M25 18 Q32 14 39 18" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M21 14 Q32 9 43 14" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.75"/>
+</svg>

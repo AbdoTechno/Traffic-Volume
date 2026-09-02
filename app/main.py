@@ -65,6 +65,14 @@ def get_styles() -> FileResponse:
     return FileResponse(static_path / "styles.css", media_type="text/css")
 
 
+@app.get("/favicon.svg")
+@app.get("/favicon.ico")
+def get_favicon() -> FileResponse:
+    """Serve brand favicon."""
+    return FileResponse(static_path / "favicon.svg", media_type="image/svg+xml")
+
+
+
 # ── Include Routers ──────────────────────────────────────────────────────────
 app.include_router(forecast_router)
 
