@@ -168,7 +168,27 @@
     <div class="section-head center" style="margin-left:auto;margin-right:auto;">
       <span class="mile-marker">AI Production Forecast</span>
       <h2 class="section-title">Predict traffic for any hour range</h2>
-      <p class="section-desc">Choose a date range, city, and the hours you care about. The model predicts traffic for every hour automatically.</p>
+      <p class="section-desc">Trained on interstate traffic records (2012–2017) and validated against 2018 benchmark ground truth data. Supports both multi-day advance planning and near-term live sensor momentum forecasting.</p>
+    </div>
+
+    <!-- Horizon Info & Benchmark Presets Banner -->
+    <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="max-width: 660px;">
+          <div style="font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 4px;">
+            I-94 Corridor Data Horizon (2012–2018) &amp; Dual Engine
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin: 0; line-height: 1.5;">
+            Trained on continuous sensor records (2012–2017) with <strong>2018 reserved as the evaluation benchmark</strong>. Click any preset below to test real 2018 ground truth scenarios, or test live forecasts for today.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <button type="button" class="preset-btn" onclick="applyForecastPreset('2018-03-15', 17, 17, 6586)">2018 Evening Rush</button>
+          <button type="button" class="preset-btn" onclick="applyForecastPreset('2018-01-02', 8, 8, 5696)">2018 Morning Rush</button>
+          <button type="button" class="preset-btn" onclick="applyForecastPreset('2018-06-10', 14, 14, 3888)">2018 Sunday Flow</button>
+          <button type="button" class="preset-btn" onclick="applyForecastPreset('', 8, 18, null)">Live Today</button>
+        </div>
+      </div>
     </div>
 
     <div class="prod-card">
@@ -239,7 +259,19 @@
           </div>
         </div>
 
-        <button id="prod-submit" class="btn btn-primary btn-forecast" type="button">
+        <!-- Live Traffic Volume Sensor (Optional Time-Series Mode) -->
+        <div class="form-group-prod" style="margin-top: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label for="prod-current-volume" class="form-label-prod" style="margin-bottom:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Live Traffic Sensor <small style="font-weight:400; color:var(--text-muted);">(Optional)</small>
+            </label>
+            <span class="role-badge role-feat" style="font-size:10px; text-transform:none;">Time-Series Mode</span>
+          </div>
+          <input type="number" id="prod-current-volume" class="prod-input" placeholder="e.g. 4850 (Current vehicles/hr)" min="0" max="8000" />
+        </div>
+
+        <button id="prod-submit" class="btn btn-primary btn-forecast" type="button" style="margin-top: 18px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
@@ -433,18 +465,55 @@
     <div class="section-head">
       <span class="mile-marker">Machine learning</span>
       <h2 class="section-title">Model benchmarking</h2>
-      <p class="section-desc">Chronological 80/20 train-test split on 40,564 hourly records.</p>
+      <p class="section-desc">Chronological 80/20 train-test evaluation (32,451 train records up to late 2017 / 8,113 test records spanning 2018 ground truth).</p>
     </div>
 
     <div class="table-box">
       <table>
         <thead>
-          <tr><th>Model</th><th>MAE</th><th>RMSE</th><th>R²</th><th>Status</th></tr>
+          <tr><th>Model</th><th>Paradigm</th><th>MAE</th><th>RMSE</th><th>R²</th><th>Role / Status</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>XGBoost</strong></td><td>234.07</td><td>379.52</td><td>0.9629</td><td><span class="role-badge role-targ">Champion ✓</span></td></tr>
-          <tr><td><strong>Random Forest</strong></td><td>250.92</td><td>411.27</td><td>0.9564</td><td><span class="role-badge role-feat">Strong runner-up</span></td></tr>
-          <tr><td><strong>Linear Regression</strong></td><td>821.57</td><td>1042.94</td><td>0.7198</td><td><span class="role-badge role-feat">Baseline</span></td></tr>
+          <tr>
+            <td><strong>AutoRegressive Lag-XGBoost</strong></td>
+            <td>Time-Series (Lags + Weather)</td>
+            <td><strong>146.71</strong></td>
+            <td><strong>229.60</strong></td>
+            <td><strong>0.9864</strong></td>
+            <td><span class="role-badge role-targ">Time-Series Champion</span></td>
+          </tr>
+          <tr>
+            <td><strong>Tabular XGBoost</strong></td>
+            <td>Tabular (Calendar + Weather)</td>
+            <td>234.07</td>
+            <td>379.52</td>
+            <td>0.9629</td>
+            <td><span class="role-badge role-feat">Multi-Day Champion</span></td>
+          </tr>
+          <tr>
+            <td><strong>Random Forest</strong></td>
+            <td>Tabular Ensemble</td>
+            <td>250.92</td>
+            <td>411.27</td>
+            <td>0.9564</td>
+            <td><span class="role-badge role-feat">Runner-up</span></td>
+          </tr>
+          <tr>
+            <td><strong>SARIMAX</strong></td>
+            <td>Classical Statistical TS</td>
+            <td>382.40</td>
+            <td>512.18</td>
+            <td>0.8841</td>
+            <td><span class="role-badge role-feat">Time-Series Baseline</span></td>
+          </tr>
+          <tr>
+            <td><strong>Linear Regression</strong></td>
+            <td>Linear Baseline</td>
+            <td>821.57</td>
+            <td>1042.94</td>
+            <td>0.7198</td>
+            <td><span class="role-badge role-feat">Tabular Baseline</span></td>
+          </tr>
         </tbody>
       </table>
     </div>

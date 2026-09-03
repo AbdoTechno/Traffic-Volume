@@ -11,6 +11,13 @@ class ForecastRequest(BaseModel):
     # Hour range: predict every hour from start_hour to end_hour (inclusive)
     start_hour: int = Field(default=8, ge=0, le=23)
     end_hour: int = Field(default=18, ge=0, le=23)
+    # Optional real-time sensor observation for Live Momentum Time-Series Forecasting
+    current_volume: float | None = Field(
+        default=None,
+        ge=0,
+        le=8000,
+        description="Optional live traffic volume (veh/hr). When provided, activates AutoRegressive Time-Series forecasting.",
+    )
 
     @model_validator(mode="after")
     def validate_hour_range(self) -> "ForecastRequest":

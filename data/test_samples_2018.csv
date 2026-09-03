@@ -1,0 +1,9 @@
+Scenario,Date,Hour,Day_of_Week,Holiday,Weather,Temp_Celsius,Actual_Volume,Live_Sensor_Lag1,Tabular_Prediction,Tabular_Error,Lag_TS_Prediction,Lag_TS_Error
+"Morning Rush Peak (Tuesday, Clear)",2018-01-02,8,Tuesday,Not Holiday,Clear,-23.1,4901,5696,5177.2,276.2,5548.0,647.0
+"Evening Rush Peak (Thursday, Clouds)",2018-03-15,17,Thursday,Not Holiday,Clear,2.8,6279,6586,6224.8,54.1,6197.6,81.4
+Winter Snowstorm Morning Commute,2018-01-22,8,Monday,Not Holiday,Snow,-0.1,4429,5250,5320.1,891.1,5292.5,863.5
+Sunday Afternoon Leisure Flow,2018-06-10,14,Sunday,Not Holiday,Clouds,21.4,4125,3888,4380.1,255.1,4089.5,35.5
+Independence Day Holiday Midday,2018-07-04,12,Wednesday,Independence Day,Rain,21.8,2761,2603,3255.1,494.1,3167.4,406.4
+Late Night Free-Flow Traffic,2018-05-18,2,Friday,Not Holiday,Clear,18.8,365,453,379.6,14.6,419.5,54.5
+Rainy Friday Afternoon Rush,2018-06-15,16,Friday,Not Holiday,Thunderstorm,30.8,6333,5993,6181.8,151.2,6125.3,207.7
+Labor Day Holiday Flow,2018-09-03,15,Monday,Labor Day,Rain,23.5,4411,4446,4344.6,66.4,4683.3,272.3

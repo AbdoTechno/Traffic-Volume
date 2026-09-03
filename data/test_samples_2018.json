@@ -1,0 +1,254 @@
+{
+  "description": "Real held-out test scenarios from 2018 (339 days / 8,113 observations never seen during training).",
+  "total_scenarios": 8,
+  "scenarios": [
+    {
+      "id": 1,
+      "scenario": "Morning Rush Peak (Tuesday, Clear)",
+      "date": "2018-01-02",
+      "hour": 8,
+      "day_of_week": "Tuesday",
+      "holiday": "Not Holiday",
+      "weather": "Clear",
+      "temp_celsius": -23.1,
+      "ground_truth": {
+        "actual_traffic_volume": 4901,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-01-02",
+        "start_hour": 8,
+        "end_hour": 8,
+        "live_traffic_sensor": 5696
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 5177.2,
+          "absolute_error": 276.2
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 5548.0,
+          "absolute_error": 647.0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "scenario": "Evening Rush Peak (Thursday, Clouds)",
+      "date": "2018-03-15",
+      "hour": 17,
+      "day_of_week": "Thursday",
+      "holiday": "Not Holiday",
+      "weather": "Clear",
+      "temp_celsius": 2.8,
+      "ground_truth": {
+        "actual_traffic_volume": 6279,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-03-15",
+        "start_hour": 17,
+        "end_hour": 17,
+        "live_traffic_sensor": 6586
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 6224.8,
+          "absolute_error": 54.1
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 6197.6,
+          "absolute_error": 81.4
+        }
+      }
+    },
+    {
+      "id": 3,
+      "scenario": "Winter Snowstorm Morning Commute",
+      "date": "2018-01-22",
+      "hour": 8,
+      "day_of_week": "Monday",
+      "holiday": "Not Holiday",
+      "weather": "Snow",
+      "temp_celsius": -0.1,
+      "ground_truth": {
+        "actual_traffic_volume": 4429,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-01-22",
+        "start_hour": 8,
+        "end_hour": 8,
+        "live_traffic_sensor": 5250
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 5320.1,
+          "absolute_error": 891.1
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 5292.5,
+          "absolute_error": 863.5
+        }
+      }
+    },
+    {
+      "id": 4,
+      "scenario": "Sunday Afternoon Leisure Flow",
+      "date": "2018-06-10",
+      "hour": 14,
+      "day_of_week": "Sunday",
+      "holiday": "Not Holiday",
+      "weather": "Clouds",
+      "temp_celsius": 21.4,
+      "ground_truth": {
+        "actual_traffic_volume": 4125,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-06-10",
+        "start_hour": 14,
+        "end_hour": 14,
+        "live_traffic_sensor": 3888
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 4380.1,
+          "absolute_error": 255.1
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 4089.5,
+          "absolute_error": 35.5
+        }
+      }
+    },
+    {
+      "id": 5,
+      "scenario": "Independence Day Holiday Midday",
+      "date": "2018-07-04",
+      "hour": 12,
+      "day_of_week": "Wednesday",
+      "holiday": "Independence Day",
+      "weather": "Rain",
+      "temp_celsius": 21.8,
+      "ground_truth": {
+        "actual_traffic_volume": 2761,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-07-04",
+        "start_hour": 12,
+        "end_hour": 12,
+        "live_traffic_sensor": 2603
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 3255.1,
+          "absolute_error": 494.1
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 3167.4,
+          "absolute_error": 406.4
+        }
+      }
+    },
+    {
+      "id": 6,
+      "scenario": "Late Night Free-Flow Traffic",
+      "date": "2018-05-18",
+      "hour": 2,
+      "day_of_week": "Friday",
+      "holiday": "Not Holiday",
+      "weather": "Clear",
+      "temp_celsius": 18.8,
+      "ground_truth": {
+        "actual_traffic_volume": 365,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-05-18",
+        "start_hour": 2,
+        "end_hour": 2,
+        "live_traffic_sensor": 453
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 379.6,
+          "absolute_error": 14.6
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 419.5,
+          "absolute_error": 54.5
+        }
+      }
+    },
+    {
+      "id": 7,
+      "scenario": "Rainy Friday Afternoon Rush",
+      "date": "2018-06-15",
+      "hour": 16,
+      "day_of_week": "Friday",
+      "holiday": "Not Holiday",
+      "weather": "Thunderstorm",
+      "temp_celsius": 30.8,
+      "ground_truth": {
+        "actual_traffic_volume": 6333,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-06-15",
+        "start_hour": 16,
+        "end_hour": 16,
+        "live_traffic_sensor": 5993
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 6181.8,
+          "absolute_error": 151.2
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 6125.3,
+          "absolute_error": 207.7
+        }
+      }
+    },
+    {
+      "id": 8,
+      "scenario": "Labor Day Holiday Flow",
+      "date": "2018-09-03",
+      "hour": 15,
+      "day_of_week": "Monday",
+      "holiday": "Labor Day",
+      "weather": "Rain",
+      "temp_celsius": 23.5,
+      "ground_truth": {
+        "actual_traffic_volume": 4411,
+        "description": "Real observed count on I-94 westbound"
+      },
+      "website_inputs": {
+        "city": "Minneapolis",
+        "start_date": "2018-09-03",
+        "start_hour": 15,
+        "end_hour": 15,
+        "live_traffic_sensor": 4446
+      },
+      "model_predictions": {
+        "tabular_xgboost": {
+          "predicted_volume": 4344.6,
+          "absolute_error": 66.4
+        },
+        "time_series_lag_xgboost": {
+          "predicted_volume": 4683.3,
+          "absolute_error": 272.3
+        }
+      }
+    }
+  ]
+}

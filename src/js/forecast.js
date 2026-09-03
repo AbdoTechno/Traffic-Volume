@@ -9,6 +9,7 @@ const prodDays       = document.getElementById('prod-days');
 const prodCity       = document.getElementById('prod-city');
 const prodStartHour  = document.getElementById('prod-start-hour');
 const prodEndHour    = document.getElementById('prod-end-hour');
+const prodCurrentVolume = document.getElementById('prod-current-volume');
 const prodOutput     = document.getElementById('prod-output');
 const prodSubmit     = document.getElementById('prod-submit');
 const prodStatusChip = document.getElementById('prod-status-chip');
@@ -124,6 +125,9 @@ function renderDayCard(day) {
   const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   const avgLvl  = trafficLevel(day.daily_avg);
   const peakLvl = trafficLevel(day.peak_volume);
+  const modelBadge = day.primary_model === 'AutoRegressive Lag-XGBoost'
+    ? '<span class="role-badge role-targ" style="font-size:10px; margin-left:6px;">AutoRegressive TS</span>'
+    : '<span class="role-badge role-feat" style="font-size:10px; margin-left:6px;">Tabular XGBoost</span>';
 
   const hourlyRows = day.hourly.map(h => {
     const lvl = trafficLevel(h.predicted_traffic_volume);
@@ -144,6 +148,7 @@ function renderDayCard(day) {
         <div class="day-card-date">
           <strong>${dayName}</strong>
           <span>${dateStr}</span>
+          ${modelBadge}
         </div>
         <div class="day-card-avg">
           <div class="day-avg-val">${Math.round(day.daily_avg).toLocaleString()}</div>
@@ -210,7 +215,7 @@ async function fetchProductionForecast() {
 
   if (endH < startH) {
     prodOutput.innerHTML = renderWarning(
-      '⏱️ Invalid hour range',
+      'Invalid hour range',
       'End hour must be greater than or equal to start hour.',
     );
     return;
@@ -224,6 +229,13 @@ async function fetchProductionForecast() {
     start_hour: startH,
     end_hour:   endH,
   };
+
+  if (prodCurrentVolume && prodCurrentVolume.value.trim() !== '') {
+    const parsedVol = parseFloat(prodCurrentVolume.value.trim());
+    if (!isNaN(parsedVol) && parsedVol >= 0) {
+      payload.current_volume = parsedVol;
+    }
+  }
 
   // Loading state
   prodSubmit.disabled = true;
@@ -267,21 +279,21 @@ async function fetchProductionForecast() {
     let advice = '';
 
     if (userMessage.includes('days') || userMessage.includes('less than')) {
-      userMessage = '📅 Maximum 3 days allowed';
+      userMessage = ' Maximum 3 days allowed';
       advice      = 'Please select 3 days or fewer.';
     } else if (userMessage.includes('accessible') || userMessage.includes('fetch') || userMessage.includes('Failed to fetch')) {
-      userMessage = '🔗 API connection failed';
+      userMessage = 'API connection failed';
       advice      = window.location.port === '5500'
         ? 'Running with Live Server: Please ensure the FastAPI backend is running via `uvicorn app.main:app` on port 8000.'
         : 'The backend server is temporarily unavailable.';
     } else if (userMessage.includes('weather') || userMessage.includes('forecast')) {
-      userMessage = '⛅ Weather data unavailable';
+      userMessage = 'Weather data unavailable';
       advice      = 'Unable to fetch weather forecast for the selected city.';
     }
 
     prodOutput.innerHTML = renderWarning(userMessage, advice);
     if (prodStatusChip) {
-      prodStatusChip.textContent = '✕ Error';
+      prodStatusChip.textContent = 'Error';
       prodStatusChip.className   = 'prod-output-status status-err';
     }
   } finally {
@@ -298,3 +310,24 @@ async function fetchProductionForecast() {
 if (prodSubmit) {
   prodSubmit.addEventListener('click', fetchProductionForecast);
 }
+
+// ── 2018 Benchmark Preset Applicator ─────────────────────────
+function applyForecastPreset(dateStr, startH, endH, sensorVal) {
+  if (dateStr) {
+    prodStartDate.value = dateStr;
+  } else {
+    const now = new Date();
+    prodStartDate.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+      .toISOString().slice(0, 10);
+  }
+  prodDays.value = 1;
+  prodStartHour.value = startH;
+  prodEndHour.value = endH;
+  updateHourRange.call(prodStartHour);
+  if (prodCurrentVolume) {
+    prodCurrentVolume.value = sensorVal !== null && sensorVal !== undefined ? sensorVal : '';
+  }
+  fetchProductionForecast();
+}
+window.applyForecastPreset = applyForecastPreset;
+
