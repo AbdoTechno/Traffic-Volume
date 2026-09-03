@@ -1,0 +1,28 @@
+{
+  "model_name": "AutoRegressive Lag-XGBoost",
+  "numerical_features": [
+    "temp",
+    "rain_1h",
+    "snow_1h",
+    "clouds_all",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos",
+    "lag_1",
+    "lag_2",
+    "lag_24",
+    "lag_168",
+    "rolling_mean_6h",
+    "rolling_mean_24h"
+  ],
+  "categorical_features": [
+    "holiday",
+    "weather_main",
+    "day_of_week"
+  ],
+  "test_mae": 147.24,
+  "test_rmse": 230.23,
+  "test_r2": 0.9864,
+  "pipeline_path": "..\\src\\models\\traffic_volume_lag_pipeline.joblib"
+}

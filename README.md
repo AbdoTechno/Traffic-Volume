@@ -208,7 +208,8 @@ Traffic Volume/
 │   ├── 01_problem_statement.ipynb       # Business context and objective definition
 │   ├── 02_data_cleaning.ipynb           # Outlier treatment, timestamp parsing, deduplication
 │   ├── 03_eda.ipynb                     # In-depth visual and statistical exploration
-│   ├── 04.1_modeling_trial.ipynb        # Model comparison, tuning, and pipeline export
+│   ├── 04.1_modeling_trial.ipynb        # Model comparison, tuning, and tabular pipeline export
+│   ├── 04.2_time_series_modeling.ipynb  # AutoRegressive lag modeling & hybrid benchmark
 │   └── 05_conclusion.ipynb              # Findings, recommendations, and future work
 │
 ├── src/                                 # Frontend Assets & Production Machine Learning Code
@@ -217,11 +218,14 @@ Traffic Volume/
 │   ├── js/                              # Modular JavaScript files
 │   │   ├── simulator.js                 # Interactive client-side simulator
 │   │   ├── forecast.js                  # Production forecast UI, hour-range sliders, charts
-│   │   └── weather-board.js             # Live weather widget & mascot animation
+│   │   ├── weather-board.js             # Live weather widget & mascot animation
+│   │   └── navigation.js                # Mobile navigation drawer & active scroll spy
 │   ├── models/                          # Exported Model Artifacts
 │   │   ├── save_production_artifacts.py # Standalone script to train & export pipeline
-│   │   ├── traffic_volume_model_pipeline.joblib # Serialized Scikit-Learn + XGBoost pipeline
-│   │   └── traffic_volume_model_metadata.json   # Model parameters and metric logs
+│   │   ├── traffic_volume_model_pipeline.joblib     # Tabular XGBoost pipeline (04.1)
+│   │   ├── traffic_volume_model_metadata.json       # Tabular pipeline metadata
+│   │   ├── traffic_volume_lag_pipeline.joblib       # AutoRegressive Lag-XGBoost pipeline (04.2)
+│   │   └── traffic_volume_lag_metadata.json         # Lag pipeline metadata
 │   ├── production/                      # Production Feature Pipeline
 │   │   ├── feature_builder.py           # Feature engineering & transformation engine
 │   │   ├── predictor.py                 # TrafficPredictor class (inference & range prediction)

@@ -59,13 +59,16 @@ class FeatureBuilder:
         hour_cyc = FeatureBuilder.compute_cyclical(hour, 24)
         month_cyc = FeatureBuilder.compute_cyclical(date_value.month, 12)
 
+        raw_temp = float(weather_data.get("temp", 293.15))
+        temp_kelvin = raw_temp + 273.15 if raw_temp < 200.0 else raw_temp
+
         return {
             # --- categorical (OHE in pipeline) ---
             "holiday":      FeatureBuilder.get_holiday_label(date_value),
             "weather_main": weather_main,
             "day_of_week":  FeatureBuilder.get_day_of_week(date_value),
             # --- numerical (StandardScaler in pipeline) ---
-            "temp":      float(weather_data.get("temp", 293.0)),
+            "temp":      temp_kelvin,
             "rain_1h":   float(weather_data.get("rain_1h", 0.0)),
             "snow_1h":   float(weather_data.get("snow_1h", 0.0)),
             "clouds_all": float(weather_data.get("clouds_all", 0.0)),
@@ -74,6 +77,30 @@ class FeatureBuilder:
             "month_sin": month_cyc["sin"],
             "month_cos": month_cyc["cos"],
         }
+
+    @staticmethod
+    def build_lag_row_for_datetime(
+        date_value: datetime,
+        hour: int,
+        weather_data: Dict[str, Any],
+        lag_1: float,
+        lag_2: float,
+        lag_24: float,
+        lag_168: float,
+        rolling_mean_6h: float,
+        rolling_mean_24h: float,
+    ) -> Dict[str, Any]:
+        """Build one feature row containing both exogenous weather/calendar and autoregressive lags."""
+        row = FeatureBuilder.build_row_for_datetime(date_value, hour, weather_data)
+        row.update({
+            "lag_1": float(lag_1),
+            "lag_2": float(lag_2),
+            "lag_24": float(lag_24),
+            "lag_168": float(lag_168),
+            "rolling_mean_6h": float(rolling_mean_6h),
+            "rolling_mean_24h": float(rolling_mean_24h),
+        })
+        return row
 
     @staticmethod
     def build_feature_frame(
