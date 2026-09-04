@@ -1,8 +1,10 @@
 .env
 .env.*
 !.env.example
-
 *.md
+!README.md
+!docs/04.2_time_series_report.md
+!docs/project_guide.md
 
 __pycache__/
 *.pyc
@@ -10,3 +12,11 @@ __pycache__/
 venv/
 .ipynb_checkpoints/
 .DS_Store
+
+# Presentation slides and generation artifacts
+*.backup.pptx
+docs/*_slide.html
+docs/*slide*.html
+reports/insert_*.py
+reports/visualizations/generate_*.py
+reports/visualizations/*_diagram.png
